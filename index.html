@@ -1082,6 +1082,29 @@ const esc = s => String(s ?? '').replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt
 let cart = {};
 let currentCategory = "all";
 
+/* ===== IMAGE FALLBACK: لو الصورة ما ظهرتش بيجرب أسماء فولدر/ترميز تاني ===== */
+function imgCandidates(path){
+  const raw  = String(path);
+  const file = decodeURIComponentSafe(raw.split('/').pop());
+  const dot  = file.lastIndexOf('.');
+  const base = dot > -1 ? file.slice(0, dot) : file;
+  const ext  = dot > -1 ? file.slice(dot) : '';
+  const names = [file, file.toLowerCase(), base + ext.toLowerCase(), base + ext.toUpperCase()];
+  if(/^\.jpe?g$/i.test(ext)){ names.push(base + '.jpg', base + '.jpeg', base + '.JPG', base + '.JPEG'); }
+  const out = [raw, raw.split('/').map(x => encodeURIComponent(decodeURIComponentSafe(x))).join('/')];
+  ['IMAGES','images','Images',''].forEach(d => [...new Set(names)].forEach(n => out.push((d ? d + '/' : '') + encodeURIComponent(n))));
+  return [...new Set(out)];
+}
+function decodeURIComponentSafe(s){ try { return decodeURIComponent(s); } catch(_) { return s; } }
+function imgFail(img){
+  const list = imgCandidates(img.dataset.orig || img.getAttribute('src'));
+  const i = Number(img.dataset.try || 0) + 1;
+  if(i < list.length){ img.dataset.try = i; img.src = list[i]; return; }
+  console.warn('الصورة مش موجودة:', img.dataset.orig, '— جربت:', list);
+  if(img.parentNode) img.parentNode.classList.add('no-img');
+  img.remove();
+}
+
 /* ===== CATEGORIES ===== */
 function renderCategories(){
   const el = document.getElementById('categoriesGrid');
@@ -1135,7 +1158,7 @@ function renderProducts() {
   grid.innerHTML = filtered.map(p => `
     <div class="product-card">
       <div class="product-img ${p.image ? '' : 'no-img'}">
-        ${p.image ? `<img src="${esc(p.image)}" alt="${esc(p.name)}" loading="lazy" onerror="this.parentNode.classList.add('no-img');this.remove()">` : ''}
+        ${p.image ? `<img src="${esc(p.image)}" data-orig="${esc(p.image)}" alt="${esc(p.name)}" loading="lazy" onerror="imgFail(this)">` : ''}
       </div>
 
       <div class="product-info">
@@ -1210,7 +1233,7 @@ function renderCart(){
   itemsEl.innerHTML = items.map(([key, item]) => `
     <div class="cart-item">
       ${item.image
-        ? `<img class="cart-item-img" src="${esc(item.image)}" alt="${esc(item.name)}">`
+        ? `<img class="cart-item-img" src="${esc(item.image)}" data-orig="${esc(item.image)}" alt="${esc(item.name)}" onerror="imgFail(this)">`
         : `<div class="cart-item-emoji">${item.emoji || '🍬'}</div>`}
       <div class="cart-item-info">
         <div class="cart-item-name">${esc(item.name)}</div>
