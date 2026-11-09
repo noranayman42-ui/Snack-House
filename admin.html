@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex">
+<title>لوحة المنتجات — Snack House</title>
+<link rel="icon" type="image/jpeg" href="IMAGES/logo.jpg">
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --gold: #C9A84C; --cream: #FAF6EF; --dark: #1A1208;
+    --chocolate: #5C3317; --blush: #F2E0D0; --muted: #8C7355;
+    --ok: #2E7D4F; --danger: #B3402A;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Tajawal', sans-serif; background: var(--cream); color: var(--dark); }
+
+  header {
+    background: var(--chocolate); color: #fff; padding: 12px 28px;
+    display: flex; align-items: center; justify-content: space-between; gap: 14px;
+  }
+  .brand { display: flex; align-items: center; gap: 12px; font-size: 18px; font-weight: 700; }
+  .brand img { width: 46px; height: 46px; border-radius: 50%; border: 2px solid var(--gold); object-fit: cover; }
+  .dirty-badge { display: none; background: var(--gold); color: var(--dark); font-size: 13px; font-weight: 700; padding: 6px 14px; border-radius: 999px; }
+  .dirty-badge.show { display: inline-block; }
+
+  .wrap {
+    max-width: 1150px; margin: 26px auto; padding: 0 20px 130px;
+    display: grid; grid-template-columns: 390px 1fr; gap: 24px; align-items: start;
+  }
+  .card { background: #fff; border: 1px solid rgba(201,168,76,0.35); border-radius: 8px; padding: 22px; }
+  .card + .card { margin-top: 24px; }
+  h2 { font-size: 19px; color: var(--chocolate); margin-bottom: 16px; }
+
+  .field { margin-bottom: 14px; }
+  .lbl { display: block; font-size: 14px; font-weight: 700; margin-bottom: 6px; color: var(--chocolate); }
+  input[type=text], input[type=number], select, .field input:not([type=file]) {
+    width: 100%; padding: 11px 12px; border: 1px solid #d9cdb8; border-radius: 6px;
+    font-family: inherit; font-size: 15px; background: #fffdf9; color: var(--dark);
+  }
+  input:focus, select:focus { outline: 2px solid rgba(201,168,76,0.5); border-color: var(--gold); }
+  .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+  .imgbox { display: flex; gap: 12px; align-items: flex-start; }
+  .prev {
+    flex: 0 0 84px; height: 84px; border-radius: 8px; background: var(--blush);
+    display: flex; align-items: center; justify-content: center; font-size: 34px; overflow: hidden;
+    border: 1px dashed var(--gold);
+  }
+  .prev img { width: 100%; height: 100%; object-fit: cover; }
+  .imgbox .inputs { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 8px; }
+  input[type=file] { font-family: inherit; font-size: 13px; width: 100%; }
+  .hint { font-size: 12.5px; color: var(--muted); margin-top: 6px; line-height: 1.6; }
+
+  button { font-family: inherit; cursor: pointer; }
+  .btn { border: none; padding: 12px 22px; border-radius: 6px; font-size: 15px; font-weight: 700; transition: all .2s; }
+  .btn-main { background: var(--chocolate); color: #fff; }
+  .btn-main:hover { background: var(--gold); color: var(--dark); }
+  .btn-ghost { background: transparent; border: 1px solid #cdbf9f; color: var(--chocolate); }
+  .btn-ghost:hover { border-color: var(--gold); }
+  .form-actions { display: flex; gap: 10px; margin-top: 6px; }
+  .form-actions .btn-main { flex: 1; }
+  .editing-note { display: none; background: #fff4d6; border: 1px solid var(--gold); padding: 8px 12px; border-radius: 6px; font-size: 13.5px; margin-bottom: 14px; }
+  .editing-note.show { display: block; }
+
+  /* categories */
+  .cats { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 14px; }
+  .cat-chip { display: inline-flex; align-items: center; gap: 6px; background: var(--blush); border-radius: 999px; padding: 6px 8px 6px 14px; font-size: 14px; }
+  .cat-chip .n { color: var(--muted); font-size: 12px; }
+  .cat-chip button { border: none; background: rgba(0,0,0,0.08); width: 22px; height: 22px; border-radius: 50%; font-size: 12px; color: var(--chocolate); }
+  .cat-chip button:disabled { opacity: .3; cursor: not-allowed; }
+  .cat-add { display: grid; grid-template-columns: 70px 1fr auto; gap: 8px; }
+
+  /* list */
+  .list-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
+  .count { color: var(--muted); font-size: 14px; }
+  .plist { display: flex; flex-direction: column; gap: 10px; }
+  .prow { display: grid; grid-template-columns: 58px 1fr auto; gap: 14px; align-items: center; padding: 10px; border: 1px solid #eee3cf; border-radius: 8px; background: #fffdf9; }
+  .prow.is-editing { border-color: var(--gold); background: #fff8e4; }
+  .thumb { width: 58px; height: 58px; border-radius: 6px; background: var(--blush); display: flex; align-items: center; justify-content: center; font-size: 24px; overflow: hidden; }
+  .thumb img { width: 100%; height: 100%; object-fit: cover; }
+  .pname { font-weight: 700; font-size: 16px; }
+  .pmeta { font-size: 13px; color: var(--muted); margin-top: 3px; }
+  .pbtns { display: flex; gap: 6px; }
+  .pbtns button { border: 1px solid #d9cdb8; background: #fff; padding: 7px 12px; border-radius: 6px; font-size: 13px; }
+  .pbtns .del { color: var(--danger); }
+  .pbtns button:hover { border-color: var(--gold); }
+  .empty { text-align: center; color: var(--muted); padding: 30px 0; }
+
+  /* bottom bar */
+  .bar {
+    position: fixed; bottom: 0; left: 0; right: 0; background: #fff; border-top: 2px solid var(--gold);
+    padding: 12px 24px; display: flex; gap: 14px; align-items: center; justify-content: space-between; z-index: 50;
+    box-shadow: 0 -6px 24px rgba(0,0,0,0.08);
+  }
+  .bar-info { font-size: 13.5px; line-height: 1.7; color: var(--chocolate); flex: 1; min-width: 0; }
+  .bar-info b { color: var(--dark); }
+  .bar-btns { display: flex; gap: 10px; flex-shrink: 0; }
+
+  .warn { background: #fde8e3; border: 1px solid var(--danger); color: var(--danger); padding: 12px 16px; border-radius: 8px; margin: 20px auto 0; max-width: 1110px; font-size: 14px; }
+
+  .toast { position: fixed; top: 20px; left: 50%; transform: translate(-50%, -80px); background: var(--chocolate); color: #fff; padding: 12px 24px; border-radius: 8px; transition: transform .35s; z-index: 100; font-size: 15px; }
+  .toast.show { transform: translate(-50%, 0); }
+
+  @media (max-width: 900px) {
+    .wrap { grid-template-columns: 1fr; padding-bottom: 190px; }
+    .bar { flex-direction: column; align-items: stretch; }
+    .bar-btns .btn { flex: 1; }
+    header { padding: 12px 16px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="brand"><img src="IMAGES/logo.jpg" alt=""> لوحة المنتجات</div>
+  <span class="dirty-badge" id="dirtyBadge">⚠ فيه تغييرات لسه ما اتحملتش</span>
+</header>
+
+<div id="loadWarn"></div>
+
+<div class="wrap">
+
+  <!-- ===== RIGHT: FORM ===== -->
+  <div>
+    <div class="card">
+      <h2 id="formTitle">➕ إضافة منتج جديد</h2>
+      <div class="editing-note" id="editingNote">إنتِ بتعدلي منتج موجود. اضغطي «حفظ التعديل» أو «إلغاء».</div>
+
+      <form id="pForm" autocomplete="off">
+        <div class="field">
+          <label class="lbl" for="f_name">اسم المنتج *</label>
+          <input type="text" id="f_name" required placeholder="مثال: إندومي دجاج">
+        </div>
+
+        <div class="row2">
+          <div class="field">
+            <label class="lbl" for="f_price">السعر (ج.م) *</label>
+            <input type="number" id="f_price" min="0" step="any" required placeholder="0">
+          </div>
+          <div class="field">
+            <label class="lbl" for="f_cat">القسم *</label>
+            <select id="f_cat" required></select>
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="lbl" for="f_origin">بلد المنشأ</label>
+          <input type="text" id="f_origin" list="origins" placeholder="مثال: إندونيسيا 🇮🇩">
+          <datalist id="origins">
+            <option value="أمريكا 🇺🇸"><option value="سويسرا 🇨🇭"><option value="إيطاليا 🇮🇹">
+            <option value="بلجيكا 🇧🇪"><option value="ألمانيا 🇩🇪"><option value="بريطانيا 🇬🇧">
+            <option value="فرنسا 🇫🇷"><option value="اليابان 🇯🇵"><option value="كوريا 🇰🇷">
+            <option value="تايلاند 🇹🇭"><option value="إندونيسيا 🇮🇩"><option value="تركيا 🇹🇷">
+            <option value="مصر 🇪🇬"><option value="السعودية 🇸🇦">
+          </datalist>
+        </div>
+
+        <div class="field">
+          <label class="lbl" for="f_desc">وصف قصير</label>
+          <input type="text" id="f_desc" placeholder="مثال: نودلز سريعة التحضير">
+        </div>
+
+        <div class="field">
+          <span class="lbl">صورة المنتج</span>
+          <div class="imgbox">
+            <div class="prev" id="prev">🍬</div>
+            <div class="inputs">
+              <input type="file" id="f_file" accept="image/*">
+              <input type="text" id="f_image" placeholder="IMAGES/اسم-الصورة.jpg" dir="ltr">
+            </div>
+          </div>
+          <div class="hint">اختاري الصورة من جهازك، وبعدين ارفعيها في فولدر <b>IMAGES</b> على GitHub بنفس الاسم بالظبط.</div>
+        </div>
+
+        <div class="form-actions">
+          <button type="submit" class="btn btn-main" id="saveBtn">إضافة المنتج</button>
+          <button type="button" class="btn btn-ghost" id="cancelBtn" style="display:none">إلغاء</button>
+        </div>
+      </form>
+    </div>
+
+    <div class="card">
+      <h2>🗂 الأقسام</h2>
+      <div class="cats" id="cats"></div>
+      <form class="cat-add" id="catForm" autocomplete="off">
+        <input type="text" id="c_emoji" placeholder="🍜" maxlength="4" style="text-align:center">
+        <input type="text" id="c_name" placeholder="اسم قسم جديد (مثال: شيبسي)">
+        <button type="submit" class="btn btn-ghost">إضافة</button>
+      </form>
+      <div class="hint">القسم بيتمسح بس لو مفيهوش منتجات.</div>
+    </div>
+  </div>
+
+  <!-- ===== LEFT: LIST ===== -->
+  <div class="card">
+    <div class="list-head">
+      <h2 style="margin:0">🛍 المنتجات الحالية</h2>
+      <span class="count" id="count"></span>
+    </div>
+    <div class="plist" id="plist"></div>
+  </div>
+</div>
+
+<!-- ===== BOTTOM BAR ===== -->
+<div class="bar">
+  <div class="bar-info" id="barInfo">أي تعديل هنا بيفضل عندك على الصفحة لحد ما تحمّلي الملف وترفعيه على GitHub.</div>
+  <div class="bar-btns">
+    <button class="btn btn-ghost" id="copyBtn">نسخ الكود</button>
+    <button class="btn btn-main" id="dlBtn">⬇ تحميل products.js</button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="products.js"></script>
+<script>
+const esc = s => String(s ?? '').replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+const $ = id => document.getElementById(id);
+
+const loaded = (typeof products !== 'undefined') && (typeof categories !== 'undefined');
+let items = loaded ? JSON.parse(JSON.stringify(products))   : [];
+let cats  = loaded ? JSON.parse(JSON.stringify(categories)) : [];
+let editingId = null;
+let dirty = false;
+const picked = {};   // path -> object URL (للمعاينة) للصور اللي اخترتيها في الجلسة دي
+
+if(!loaded){
+  $('loadWarn').innerHTML = '<div class="warn">⚠ مش لاقي ملف <b>products.js</b>. لازم يكون في نفس فولدر admin.html. متحمليش حاجة قبل ما يظهر لك الملف، عشان ماتمسحيش المنتجات اللي عندك.</div>';
+}
+
+function toast(msg){
+  const t = $('toast'); t.textContent = msg; t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2200);
+}
+function setDirty(v){
+  dirty = v;
+  $('dirtyBadge').classList.toggle('show', v);
+  updateBar();
+}
+window.addEventListener('beforeunload', e => { if(dirty){ e.preventDefault(); e.returnValue = ''; } });
+
+const imgSrc = p => picked[p] || p;
+
+/* ---------- render ---------- */
+function renderCatSelect(keep){
+  const sel = $('f_cat');
+  sel.innerHTML = cats.map(c => `<option value="${esc(c.name)}">${esc(c.emoji)} ${esc(c.name)}</option>`).join('');
+  if(keep && cats.some(c => c.name === keep)) sel.value = keep;
+}
+
+function renderCats(){
+  $('cats').innerHTML = cats.map((c, i) => {
+    const n = items.filter(p => p.category === c.name).length;
+    return `<span class="cat-chip">${esc(c.emoji)} ${esc(c.name)} <span class="n">(${n})</span>
+      <button type="button" data-delcat="${i}" ${n ? 'disabled title="فيه منتجات في القسم ده"' : 'title="مسح القسم"'}>✕</button></span>`;
+  }).join('') || '<div class="hint">مفيش أقسام لسه.</div>';
+}
+
+function renderList(){
+  $('count').textContent = items.length + ' منتج';
+  if(!items.length){ $('plist').innerHTML = '<div class="empty">مفيش منتجات لسه. ضيفي أول منتج من الفورم 👈</div>'; return; }
+  $('plist').innerHTML = items.map(p => `
+    <div class="prow ${p.id === editingId ? 'is-editing' : ''}">
+      <div class="thumb">${p.image ? `<img src="${esc(imgSrc(p.image))}" alt="" onerror="this.replaceWith(document.createTextNode('🍬'))">` : '🍬'}</div>
+      <div>
+        <div class="pname">${esc(p.name)}</div>
+        <div class="pmeta">${esc(p.category)} • ${esc(p.price)} ج.م${p.origin ? ' • ' + esc(p.origin) : ''}</div>
+      </div>
+      <div class="pbtns">
+        <button type="button" data-edit="${p.id}">تعديل</button>
+        <button type="button" class="del" data-del="${p.id}">مسح</button>
+      </div>
+    </div>`).join('');
+}
+
+function neededUploads(){
+  return Object.keys(picked).filter(path => items.some(p => p.image === path)).map(p => p.replace(/^IMAGES\//, ''));
+}
+function updateBar(){
+  const up = neededUploads();
+  let html = dirty
+    ? '<b>بعد التحميل:</b> استبدلي ملف <b>products.js</b> على GitHub بالملف الجديد'
+    : 'أي تعديل هنا بيفضل عندك على الصفحة لحد ما تحمّلي الملف وترفعيه على GitHub.';
+  if(dirty && up.length) html += '، وارفعي الصور دي في فولدر <b>IMAGES</b>: <b>' + up.map(esc).join('، ') + '</b>';
+  if(dirty) html += '.';
+  $('barInfo').innerHTML = html;
+}
+
+function renderAll(){ renderCats(); renderList(); updateBar(); }
+
+/* ---------- form ---------- */
+function setPreview(path){
+  const box = $('prev');
+  box.innerHTML = path ? `<img src="${esc(imgSrc(path))}" alt="" onerror="this.replaceWith(document.createTextNode('🍬'))">` : '🍬';
+}
+$('f_image').addEventListener('input', () => setPreview($('f_image').value.trim()));
+
+$('f_file').addEventListener('change', e => {
+  const file = e.target.files[0];
+  if(!file) return;
+  const path = 'IMAGES/' + file.name;
+  picked[path] = URL.createObjectURL(file);
+  $('f_image').value = path;
+  setPreview(path);
+});
+
+function resetForm(){
+  editingId = null;
+  $('pForm').reset();
+  $('f_file').value = '';
+  setPreview('');
+  $('formTitle').textContent = '➕ إضافة منتج جديد';
+  $('saveBtn').textContent = 'إضافة المنتج';
+  $('cancelBtn').style.display = 'none';
+  $('editingNote').classList.remove('show');
+  renderCatSelect();
+  renderList();
+}
+
+$('cancelBtn').addEventListener('click', resetForm);
+
+$('pForm').addEventListener('submit', e => {
+  e.preventDefault();
+  if(!loaded){ toast('ملف products.js مش متحمل'); return; }
+  if(!cats.length){ toast('ضيفي قسم الأول'); return; }
+  const price = parseFloat($('f_price').value);
+  const data = {
+    name: $('f_name').value.trim(),
+    origin: $('f_origin').value.trim(),
+    image: $('f_image').value.trim(),
+    price: price,
+    desc: $('f_desc').value.trim(),
+    category: $('f_cat').value
+  };
+  if(!data.name || isNaN(price)){ toast('اكتبي الاسم والسعر'); return; }
+
+  if(editingId !== null){
+    const p = items.find(x => x.id === editingId);
+    Object.assign(p, data);
+    toast('تم حفظ التعديل ✔');
+  } else {
+    const id = items.reduce((m, x) => Math.max(m, x.id), 0) + 1;
+    items.unshift({ id, ...data });
+    toast('تمت إضافة المنتج ✔');
+  }
+  setDirty(true);
+  const keepCat = data.category;
+  resetForm();
+  $('f_cat').value = keepCat;     // نفس القسم للمنتج اللي بعده
+  renderAll();
+  $('f_name').focus();
+});
+
+/* ---------- list actions ---------- */
+$('plist').addEventListener('click', e => {
+  const ed = e.target.closest('[data-edit]');
+  const dl = e.target.closest('[data-del]');
+  if(ed){
+    const p = items.find(x => x.id === Number(ed.dataset.edit));
+    editingId = p.id;
+    $('f_name').value = p.name; $('f_price').value = p.price;
+    $('f_origin').value = p.origin || ''; $('f_desc').value = p.desc || '';
+    $('f_image').value = p.image || ''; setPreview(p.image || '');
+    renderCatSelect(p.category);
+    $('formTitle').textContent = '✏️ تعديل منتج';
+    $('saveBtn').textContent = 'حفظ التعديل';
+    $('cancelBtn').style.display = '';
+    $('editingNote').classList.add('show');
+    renderList();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    $('f_name').focus();
+  }
+  if(dl){
+    const id = Number(dl.dataset.del);
+    const p = items.find(x => x.id === id);
+    if(confirm('تمسحي «' + p.name + '»؟')){
+      items = items.filter(x => x.id !== id);
+      if(editingId === id) resetForm();
+      setDirty(true); renderAll(); toast('تم المسح');
+    }
+  }
+});
+
+/* ---------- categories ---------- */
+$('catForm').addEventListener('submit', e => {
+  e.preventDefault();
+  const name = $('c_name').value.trim();
+  const emoji = $('c_emoji').value.trim() || '🍬';
+  if(!name) return;
+  if(cats.some(c => c.name === name)){ toast('القسم ده موجود'); return; }
+  cats.push({ name, emoji });
+  $('c_name').value = ''; $('c_emoji').value = '';
+  setDirty(true); renderCatSelect($('f_cat').value); renderAll(); toast('تمت إضافة القسم ✔');
+});
+
+$('cats').addEventListener('click', e => {
+  const b = e.target.closest('[data-delcat]');
+  if(!b || b.disabled) return;
+  const c = cats[Number(b.dataset.delcat)];
+  if(confirm('تمسحي قسم «' + c.name + '»؟')){
+    cats.splice(Number(b.dataset.delcat), 1);
+    setDirty(true); renderCatSelect($('f_cat').value); renderAll();
+  }
+});
+
+/* ---------- export ---------- */
+function buildJS(){
+  const L = [];
+  L.push('// =====================================================');
+  L.push('//  ملف المنتجات والأقسام — Snack House');
+  L.push('//  الأسهل: افتح admin.html، ضيف/عدّل، وحمّل الملف ده جاهز.');
+  L.push('//  (ولو حبيت تعدل بإيدك: كل منتج سطر واحد)');
+  L.push('// =====================================================');
+  L.push('');
+  L.push('const categories = [');
+  cats.forEach(c => L.push('  ' + JSON.stringify(c) + ','));
+  L.push('];');
+  L.push('');
+  L.push('const products = [');
+  items.forEach(p => L.push('  ' + JSON.stringify(p) + ','));
+  L.push('];');
+  L.push('');
+  return L.join('\n');
+}
+
+$('dlBtn').addEventListener('click', () => {
+  if(!loaded){ toast('ملف products.js مش متحمل'); return; }
+  const blob = new Blob([buildJS()], { type: 'text/javascript;charset=utf-8' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'products.js';
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+  setDirty(false);
+  const up = neededUploads();
+  toast(up.length ? 'اتحمل ✔ — متنسيش ترفعي الصور' : 'اتحمل ✔ — ارفعيه على GitHub');
+  if(up.length){
+    $('barInfo').innerHTML = 'اتحمل الملف ✔ ارفعيه على GitHub، وارفعي كمان الصور دي في فولدر <b>IMAGES</b>: <b>' + up.map(esc).join('، ') + '</b>';
+  }
+});
+
+$('copyBtn').addEventListener('click', async () => {
+  try { await navigator.clipboard.writeText(buildJS()); toast('تم نسخ الكود ✔'); }
+  catch(_) { toast('المتصفح منع النسخ — استخدمي زر التحميل'); }
+});
+
+/* init */
+renderCatSelect();
+renderAll();
+</script>
+</body>
+</html>
