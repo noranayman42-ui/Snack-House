@@ -318,7 +318,7 @@ function qty(id,d){C[id]=Math.max(0,(C[id]||0)+d);cartO();render(1);$('.ov').cla
 /* ===== Supabase-backed Snack House admin + orders ===== */
 const SB_URL='https://jsfyvxtmgizgpnqabvbz.supabase.co';
 const SB_KEY='sb_publishable_r_EDSgJ_PfQbKHFRcwkOsw_r3MxEl2t';
-let sb=null,adminUser=null,DB_CAT_IDS={},DB_IDS={},ORDERS=[];
+let sb=null,adminUser=null,DB_CAT_IDS={},DB_IDS={},ORDERS=[],orderSubmitting=false;
 const DB_STATUS={pending:'جديد',confirmed:'تم التأكيد',preparing:'قيد التجهيز',out_for_delivery:'خرج للتوصيل',delivered:'تم التسليم',cancelled:'ملغي'};
 function adminShell(){if(!$('#gear'))document.body.insertAdjacentHTML('beforeend','<button id="gear" class="gen" aria-label="لوحة التحكم" onclick="adminOpen()">⚙️</button><aside id="ap" class="gen"></aside>');}
 async function initSupabase(){
@@ -398,12 +398,40 @@ function checkoutOpen(){
  $('#checkoutModal').classList.add('on');
 }
 function checkoutClose(){const m=$('#checkoutModal');if(m)m.classList.remove('on');}
-async function submitOrder(e){e.preventDefault();const msg=$('#checkoutMsg');msg.textContent='جارٍ إرسال الطلب...';try{
- const quantities={};for(const [id,q] of Object.entries(C)){if(!q)continue;if(id.startsWith('box:')&&BXS[id]){for(const child of BXS[id].items)quantities[child]=(quantities[child]||0)+q;}else quantities[id]=(quantities[id]||0)+q;}
- const items=[];for(const [id,quantity] of Object.entries(quantities)){const [k,ix]=id.split(':');const pid=DB_IDS[k]&&DB_IDS[k][Number(ix)];if(!pid)throw new Error('المنتجات لسه بتتجهز على قاعدة البيانات. حدّثي الصفحة بعد ما المدير يحفظ المنتجات.');items.push({product_id:pid,quantity});}
- const {data,error}=await sb.rpc('create_order',{p_customer_name:$('#coName').value,p_phone:$('#coPhone').value,p_address:$('#coAddress').value,p_notes:$('#coNotes').value,p_items:items});if(error)throw error;
- const o=Array.isArray(data)?data[0]:data;C={};BX=[];CLOSED=false;Object.keys(BXS).forEach(k=>delete BXS[k]);checkoutClose();closeAll();render(1);toast(`تم استلام طلبك بنجاح! رقم الطلب ${o.order_number}`);
- }catch(err){msg.textContent=err.message||'حصل خطأ أثناء إرسال الطلب';}}
+async function submitOrder(e){
+ e.preventDefault();
+ if(orderSubmitting)return;
+ const form=e.currentTarget,btn=form.querySelector('button[type=submit]'),msg=$('#checkoutMsg');
+ orderSubmitting=true;btn.disabled=true;btn.textContent='جارٍ تأكيد الطلب...';msg.textContent='جارٍ إرسال طلبك، من فضلك انتظري ولا تضغطي مرة أخرى.';
+ try{
+  const quantities={};
+  for(const [id,q] of Object.entries(C)){
+   if(!q)continue;
+   if(id.startsWith('box:')&&BXS[id]){for(const child of BXS[id].items)quantities[child]=(quantities[child]||0)+q;}
+   else quantities[id]=(quantities[id]||0)+q;
+  }
+  const items=[];
+  for(const [id,quantity] of Object.entries(quantities)){
+   const [k,ix]=id.split(':');const pid=DB_IDS[k]&&DB_IDS[k][Number(ix)];
+   if(!pid)throw new Error('المنتجات لسه بتتجهز على قاعدة البيانات. حدّثي الصفحة بعد ما المدير يحفظ المنتجات.');
+   items.push({product_id:pid,quantity});
+  }
+  const {data,error}=await sb.rpc('create_order',{p_customer_name:$('#coName').value,p_phone:$('#coPhone').value,p_address:$('#coAddress').value,p_notes:$('#coNotes').value,p_items:items});
+  if(error)throw error;
+  const o=Array.isArray(data)?data[0]:data;
+  C={};BX=[];CLOSED=false;Object.keys(BXS).forEach(k=>delete BXS[k]);render(1);closeAll();
+  msg.textContent=`تم تأكيد طلبك بنجاح ❤️ رقم الطلب ${o&&o.order_number?o.order_number:''}`;
+  msg.style.cssText='display:block;text-align:center;color:#16834a;font-weight:800;font-size:16px;margin-top:16px';
+  btn.textContent='تم تأكيد الطلب ✓';btn.style.background='#16834a';
+  form.querySelectorAll('input,textarea').forEach(el=>el.disabled=true);
+  toast(`تم تأكيد طلبك بنجاح!${o&&o.order_number?' رقم الطلب '+o.order_number:''}`);
+  setTimeout(()=>{checkoutClose();orderSubmitting=false;},2200);
+ }catch(err){
+  msg.textContent=err&&err.message?err.message:'حصل خطأ أثناء إرسال الطلب. راجعي البيانات وحاولي مرة أخرى.';
+  msg.style.cssText='display:block;color:#b42336;font-weight:700;margin-top:12px';
+  btn.disabled=false;btn.textContent='تأكيد الطلب';orderSubmitting=false;
+ }
+}
 
 {const h=location.hash.slice(1);render();initSupabase()}</script>
 </body></html>
