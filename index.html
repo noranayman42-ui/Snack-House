@@ -236,6 +236,45 @@ input,select,textarea{color:var(--ink)}.sr input{color:var(--ink)}#ap input,#ap 
 .sh-confirm-secondary{border:1px solid #d7cbc5;background:transparent;color:var(--ink)}
 @media(max-width:600px){.sh-confirm-head{margin-bottom:24px}.sh-confirm-check{width:78px;height:78px;font-size:40px}.sh-confirm-top{padding:18px;gap:10px}.sh-confirm-meta strong{font-size:1.05rem}.sh-confirm-info{grid-template-columns:1fr;gap:12px;padding:18px}.sh-confirm-items{padding:18px}.sh-confirm-card{border-radius:22px}.sh-confirm-actions button{flex:1;padding:14px 16px}}
 </style>
+<style>
+
+/* ===== Snack House order tracking ===== */
+.sh-order-stats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin:14px 0}
+.sh-order-stats>div{background:#faf4f7;border:1px solid #eadce3;border-radius:12px;padding:12px;text-align:center}
+.sh-order-stats b{display:block;font-size:1.55rem;color:#6b0f3a}
+.sh-order-stats span{font-size:.82rem;color:#66545d}
+.sh-order-stats .delivered{background:#eff8f1;border-color:#d8eadc}
+.sh-order-stats .delivered b{color:#21834a}
+.sh-track-back{position:fixed;z-index:200120;inset:0;background:#1c0f17b8;display:flex;align-items:center;justify-content:center;padding:18px;overflow:auto}
+.sh-track-box{position:relative;width:min(540px,100%);max-height:94dvh;overflow:auto;background:#fffdfb;color:#1c0f17;border:1px solid #eadfe4;border-radius:24px;padding:28px;box-shadow:0 20px 70px #0004;font-family:Tajawal,system-ui,sans-serif}
+.sh-track-close{position:absolute;left:16px;top:12px;border:0;background:none;font-size:30px;color:#6b0f3a}
+.sh-track-mark{width:58px;height:58px;border-radius:50%;display:grid;place-items:center;background:#f5e6ed;margin:0 auto 12px;font-size:27px}
+.sh-track-box h2{text-align:center;color:#6b0f3a;font:700 1.7rem Tajawal;margin-bottom:7px}
+.sh-track-intro{text-align:center;color:#7a6f74;line-height:1.7;margin-bottom:18px}
+.sh-track-box label{display:block;font-weight:700;margin:12px 0}
+.sh-track-box input{display:block;width:100%;margin-top:6px;border:1px solid #e4d7de;border-radius:11px;padding:12px;font:inherit;background:#fff;color:#1c0f17}
+.sh-track-submit,.sh-track-refresh{width:100%;border:0;border-radius:12px;padding:13px;background:#6b0f3a;color:#fff;font:700 1rem Tajawal;margin-top:8px}
+.sh-track-refresh{background:#f5e6ed;color:#6b0f3a;border:1px solid #e6d3dc}
+.sh-track-privacy{display:block;text-align:center;color:#95868d;font-size:.75rem;margin-top:15px}
+.sh-track-error,.sh-track-loading,.sh-track-cancel{margin-top:16px;padding:13px;border-radius:12px;background:#fff1f1;color:#a52235;text-align:center;line-height:1.6}
+.sh-track-loading{background:#faf4f7;color:#6b0f3a}
+.sh-track-progress{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:5px;margin:22px 0 16px;position:relative}
+.sh-track-step{display:flex;flex-direction:column;align-items:center;gap:8px;text-align:center;color:#9b8e94;font-size:.78rem;position:relative}
+.sh-track-step span{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;background:#eee8eb;color:#887b81;font-weight:800;border:2px solid #eee8eb}
+.sh-track-step.is-done{color:#6b0f3a}
+.sh-track-step.is-done span{background:#f5e6ed;border-color:#d8aebe;color:#6b0f3a}
+.sh-track-step.is-current span{background:#6b0f3a;border-color:#6b0f3a;color:#fff;box-shadow:0 0 0 5px #6b0f3a18}
+.sh-track-current{background:#faf6f2;border:1px solid #eee4de;border-radius:14px;padding:14px;text-align:center}
+.sh-track-current small,.sh-track-current span{display:block;color:#8b7c82}
+.sh-track-current strong{display:block;color:#6b0f3a;font-size:1.25rem;margin:4px 0}
+.sh-track-current span{font-size:.8rem;margin-top:5px}
+.sh-track-items{margin-top:14px;border-top:1px solid #eee4de;padding-top:12px}
+.sh-track-items>div{display:flex;justify-content:space-between;padding:6px 0;color:#5d4e55}
+.sh-track-total{display:flex;justify-content:space-between;align-items:center;border-top:1px solid #eee4de;margin-top:10px;padding-top:12px}
+.sh-track-total b{color:#6b0f3a}
+@media(max-width:520px){.sh-track-box{padding:24px 16px;border-radius:18px}.sh-track-step{font-size:.68rem}.sh-track-step span{width:30px;height:30px}.sh-order-stats b{font-size:1.3rem}}
+
+</style>
 </head>
 <body data-t="home">
 <div id="app"></div>
@@ -291,7 +330,7 @@ function hdr(){const n=Object.values(C).reduce((a,b)=>a+b,0),ann=S.ann.split('|'
  const nv=(l,a,on)=>`<button class="${on?'on':''}" onclick="${a}">${l}</button>`;
  return `<div class="ann"><button class="lang" onclick="toast('English soon')">ENGLISH</button><div class="mq"><div class="tr">${ann+ann+ann+ann}</div></div></div>
  <header><button class="logo" onclick="go('home')"><img class="lgi" src="${LOGO}" alt="Snack House"><small>كل لقمة تسعدك!</small></button>
- <nav>${nv('الرئيسية',"go('home')",R.v==='home')}${nv('كل المنتجات',"go('all')",R.v==='all'&&!R.mode&&!R.cat)}${nv('الأقسام',"go('home','cats')",0)}${nv('وصل حديثًا',"go('all',{mode:'new'})",R.mode==='new')}</nav>
+ <nav>${nv('الرئيسية',"go('home')",R.v==='home')}${nv('كل المنتجات',"go('all')",R.v==='all'&&!R.mode&&!R.cat)}${nv('الأقسام',"go('home','cats')",0)}${nv('وصل حديثًا',"go('all',{mode:'new'})",R.mode==='new')}${nv('تتبع طلبك',"trackOrderOpen()",false)}</nav>
  <div class="ic"><button class="ib mb" aria-label="القائمة" onclick="menuO()">☰</button><button class="ib" aria-label="بحث" onclick="srch()">🔍</button><button class="ib acc" aria-label="حسابي" onclick="adminOpen()">👤</button><button class="ib" aria-label="المفضلة" onclick="go('all',{mode:'wish'})">♡${W.size?`<i>${W.size}</i>`:''}</button><button class="cartb" id="cb" onclick="cartO()" aria-label="السلة"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="20" r="1.4"/><circle cx="18" cy="20" r="1.4"/><path d="M2 3h3l2.6 12.2a1.5 1.5 0 0 0 1.5 1.2h8.7a1.5 1.5 0 0 0 1.5-1.1L21 8H6"/></svg><span id="cn">${n}</span></button></div></header>`}
 function cartScene(){const all=Object.entries(T).map(([k,t])=>t.p_.map(p=>({k,p})));const pick=(S.cart||[]).map(u=>({k:Object.keys(T)[0],p:['','',0,'🍬',u]}));
  for(let r=0;pick.length<6&&r<12;r++)all.forEach(l=>{const x=l.filter(o=>o.p[4])[r];if(x&&pick.length<6)pick.push(x)});
@@ -340,7 +379,7 @@ function sres(q){const r=sfind(q),el=$('#srr');if(!q.trim()){el.innerHTML='<p cl
 function goS(){const q=$('#sq').value;if(q.trim())go('all',{q:q.trim()})}
 function srch(){ov();closeAll();$('.ov').classList.add('on');$('#sr').classList.add('on');const i=$('#sq');i.value='';sres('');setTimeout(()=>i.focus(),60)}
 function menuO(){ov();closeAll();const nl=(l,a)=>`<button class="mnl" onclick="${a}">${l}</button>`;
- $('#mn').innerHTML=`<button aria-label="إغلاق" onclick="closeAll()" style="float:left;border:0;background:none;font-size:1.4rem">✕</button><h3>القائمة</h3>${nl('الرئيسية',"go('home')")}${nl('كل المنتجات',"go('all')")}${nl('وصل حديثًا',"go('all',{mode:'new'})")}${nl('المفضلة',"go('all',{mode:'wish'})")}<h4 style="margin:16px 0 4px;color:var(--wine2)">الأقسام</h4>${Object.entries(T).map(([k,t])=>nl(esc(t.e+' '+t.n),`go('all',{cat:'${k}'})`)).join('')}`;
+ $('#mn').innerHTML=`<button aria-label="إغلاق" onclick="closeAll()" style="float:left;border:0;background:none;font-size:1.4rem">✕</button><h3>القائمة</h3>${nl('الرئيسية',"go('home')")}${nl('كل المنتجات',"go('all')")}${nl('وصل حديثًا',"go('all',{mode:'new'})")}${nl('المفضلة',"go('all',{mode:'wish'})")}${nl('تتبع طلبك',"trackOrderOpen()")}<h4 style="margin:16px 0 4px;color:var(--wine2)">الأقسام</h4>${Object.entries(T).map(([k,t])=>nl(esc(t.e+' '+t.n),`go('all',{cat:'${k}'})`)).join('')}`;
  $('.ov').classList.add('on');$('#mn').classList.add('on')}
 if(!window.__esc){window.__esc=1;document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeAll();bxClose&&bxClose()}})}
 function cartO(){ov();const ids=Object.keys(C).filter(k=>C[k]),all=P();let tot=0;
@@ -351,7 +390,8 @@ function qty(id,d){C[id]=Math.max(0,(C[id]||0)+d);cartO();render(1);$('.ov').cla
 const SB_URL='https://jsfyvxtmgizgpnqabvbz.supabase.co';
 const SB_KEY='sb_publishable_r_EDSgJ_PfQbKHFRcwkOsw_r3MxEl2t';
 let sb=null,adminUser=null,DB_CAT_IDS={},DB_IDS={},ORDERS=[],orderSubmitting=false;
-const DB_STATUS={pending:'جديد',confirmed:'تم التأكيد',preparing:'قيد التجهيز',out_for_delivery:'خرج للتوصيل',delivered:'تم التسليم',cancelled:'ملغي'};
+let ORDER_COUNTS={new:0,preparing:0,out:0,delivered:0},trackingTimer=null,lastCreatedOrderNumber='',lastCreatedPhone='';
+const DB_STATUS={pending:'جديد',confirmed:'قيد التنفيذ',preparing:'قيد التنفيذ',out_for_delivery:'خرج للتوصيل',delivered:'تم التسليم',cancelled:'ملغي'};
 function adminShell(){if(!$('#gear'))document.body.insertAdjacentHTML('beforeend','<button id="gear" class="gen" aria-label="لوحة التحكم" onclick="adminOpen()">⚙️</button><aside id="ap" class="gen"></aside>');}
 async function initSupabase(){
  try{
@@ -416,13 +456,109 @@ function addcat(){const n=$('#nn').value.trim();if(!n)return;let k='c'+Date.now(
 function addp(){T[AC].p_.push(['منتج جديد','',10,T[AC].e,'','Snack House','',4.5,0,'']);render(1);adminPanel();}
 function ed(el){const d=el.dataset,v=el.type==='checkbox'?el.checked:el.value;if(d.s)S[d.s]=v;else if(d.i!==undefined){const j=+d.j;T[d.k].p_[+d.i][j]=[2,6].includes(j)?(v===''?'':+v):j===9?(v?'new':''):v;}else T[d.k][d.f]=v;render(1);}
 function up(el){const f=el.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{const im=new Image();im.onload=()=>{const m=el.dataset.s?800:420,s=Math.min(1,m/Math.max(im.width,im.height)),c=document.createElement('canvas');c.width=im.width*s;c.height=im.height*s;c.getContext('2d').drawImage(im,0,0,c.width,c.height);const dd=c.getContext('2d').getImageData(0,0,c.width,c.height).data;let al=false;for(let q=3;q<dd.length;q+=16)if(dd[q]<250){al=true;break}const u=al?c.toDataURL('image/webp',.88):c.toDataURL('image/jpeg',.8);if(el.dataset.c)T[el.dataset.c].img=u;else if(el.dataset.s)S.img=u;else T[el.dataset.k].p_[+el.dataset.i][4]=u;render(1);adminPanel();};im.src=r.result;};r.readAsDataURL(f);}
-async function loadOrders(){const {data,error}=await sb.from('orders').select('*,order_items(*)').order('created_at',{ascending:false}).limit(100);if(error)throw error;ORDERS=data||[];}
+async function loadOrders(){
+ const [ordersRes,pendingRes,confirmedRes,preparingRes,outRes,deliveredRes]=await Promise.all([
+  sb.from('orders').select('*,order_items(*)').order('created_at',{ascending:false}).limit(100),
+  sb.from('orders').select('id',{count:'exact',head:true}).eq('status','pending'),
+  sb.from('orders').select('id',{count:'exact',head:true}).eq('status','confirmed'),
+  sb.from('orders').select('id',{count:'exact',head:true}).eq('status','preparing'),
+  sb.from('orders').select('id',{count:'exact',head:true}).eq('status','out_for_delivery'),
+  sb.from('orders').select('id',{count:'exact',head:true}).eq('status','delivered')
+ ]);
+ const failed=[ordersRes,pendingRes,confirmedRes,preparingRes,outRes,deliveredRes].find(x=>x.error);
+ if(failed)throw failed.error;
+ ORDERS=ordersRes.data||[];
+ ORDER_COUNTS={
+  new:pendingRes.count||0,
+  preparing:(confirmedRes.count||0)+(preparingRes.count||0),
+  out:outRes.count||0,
+  delivered:deliveredRes.count||0
+ };
+}
 async function orderStatus(id,status){const {error}=await sb.from('orders').update({status,updated_at:new Date().toISOString()}).eq('id',id);if(error){alert(error.message);return;}toast('تم تحديث حالة الطلب');await loadOrders();adminOrders();}
-function adminOrders(){const ap=$('#ap');ap.innerHTML=`<button class="btn" onclick="adminPanel()">← رجوع للمنتجات</button><button class="btn" onclick="adminLogout()" style="float:left">خروج</button><h3>طلبات العملاء</h3><button class="btn" onclick="loadOrders().then(adminOrders)">تحديث الطلبات</button>${ORDERS.length?ORDERS.map(o=>`<article class="order-card"><div class="order-head"><b>طلب #${o.order_number}</b><span>${new Date(o.created_at).toLocaleString('ar-EG')}</span></div><p><b>${esc(o.customer_name)}</b> · ${esc(o.phone)}</p><p>${esc(o.address)}</p>${o.notes?`<p>ملاحظات: ${esc(o.notes)}</p>`:''}<ul>${(o.order_items||[]).map(x=>`<li>${esc(x.product_name)} × ${x.quantity} — ${x.line_total} ج.م</li>`).join('')}</ul><p><b>الإجمالي: ${o.total} ج.م</b></p><label>حالة الطلب<select onchange="orderStatus('${o.id}',this.value)">${Object.entries(DB_STATUS).map(([v,l])=>`<option value="${v}"${v===o.status?' selected':''}>${l}</option>`).join('')}</select></label></article>`).join(''):'<p>لسه مفيش طلبات.</p>'}`;}
+function adminOrders(){
+ const ap=$('#ap');
+ const stats=`<div class="sh-order-stats">
+  <div><b>${ORDER_COUNTS.new}</b><span>طلبات جديدة</span></div>
+  <div><b>${ORDER_COUNTS.preparing}</b><span>قيد التنفيذ</span></div>
+  <div><b>${ORDER_COUNTS.out}</b><span>خرج للتوصيل</span></div>
+  <div class="delivered"><b>${ORDER_COUNTS.delivered}</b><span>تم تسليمها</span></div>
+ </div>`;
+ ap.innerHTML=`<button class="btn" onclick="adminPanel()">← رجوع للمنتجات</button><button class="btn" onclick="adminLogout()" style="float:left">خروج</button><h3>طلبات العملاء</h3>${stats}<button class="btn" onclick="loadOrders().then(adminOrders)">تحديث الطلبات والإحصائيات</button>${ORDERS.length?ORDERS.map(o=>`<article class="order-card"><div class="order-head"><b>طلب #${o.order_number}</b><span>${new Date(o.created_at).toLocaleString('ar-EG')}</span></div><p><b>${esc(o.customer_name)}</b> · ${esc(o.phone)}</p><p>${esc(o.address)}</p>${o.notes?`<p>ملاحظات: ${esc(o.notes)}</p>`:''}<ul>${(o.order_items||[]).map(x=>`<li>${esc(x.product_name)} × ${x.quantity} — ${x.line_total} ج.م</li>`).join('')}</ul><p><b>الإجمالي: ${o.total} ج.م</b></p><label>حالة الطلب<select onchange="orderStatus('${o.id}',this.value)">${Object.entries(DB_STATUS).map(([v,l])=>`<option value="${v}"${v===o.status?' selected':''}>${l}</option>`).join('')}</select></label></article>`).join(''):'<p>لسه مفيش طلبات.</p>'}`;
+}
 async function adminPanel(){adminShell();const ap=$('#ap');ap.classList.add('on');const f=(l,k,v)=>`<label>${l}<input data-s="${k}" value="${esc(v)}" oninput="ed(this)"></label>`;const t=T[AC];
  ap.innerHTML=`<button class="btn" onclick="adminClose()" style="float:left">✕</button><button class="btn" onclick="adminLogout()">تسجيل الخروج</button><h3>لوحة تحكم Snack House</h3><button class="btn" style="background:#16834a" onclick="adminSave()">💾 حفظ التعديلات في قاعدة البيانات</button><button class="btn" onclick="loadOrders().then(adminOrders)">📦 إدارة الطلبات</button><p class="admin-msg">أي تعديل في المنتجات لازم تضغطي بعده حفظ التعديلات.</p><h4>إضافة قسم</h4><div class="row"><input id="nn" placeholder="اسم القسم"><input id="ne" placeholder="إيموجي 🍬"><button class="btn" onclick="addcat()">إضافة</button></div><h4>الأقسام والمنتجات</h4><select onchange="AC=this.value;adminPanel()">${Object.entries(T).map(([k,v])=>`<option value="${k}"${k===AC?' selected':''}>${esc(v.n)}</option>`).join('')}</select>${t?`<label>اسم القسم<input data-k="${AC}" data-f="n" value="${esc(t.n)}" oninput="ed(this)"></label><label>الإيموجي<input data-k="${AC}" data-f="e" value="${esc(t.e)}" oninput="ed(this)"></label><label>صورة القسم<input type="file" accept="image/*" data-c="${AC}" onchange="up(this)"></label><button class="btn danger" onclick="delcat('${AC}')">حذف القسم</button>${t.p_.map((p,i)=>`<div class="admin-product"><b>منتج ${i+1}</b>${[['الاسم',0],['الوصف القصير',1],['السعر',2],['الإيموجي',3],['الماركة',5],['السعر قبل الخصم',6]].map(([l,j])=>`<label>${l}<input data-k="${AC}" data-i="${i}" data-j="${j}" value="${esc(p[j])}"${j===2||j===6?' type="number" min="0"':''} oninput="ed(this)"></label>`).join('')}<label><input type="checkbox" data-k="${AC}" data-i="${i}" data-j="9" ${p[9]==='new'?'checked':''} onchange="ed(this)"> وصل حديثًا</label><label>صورة المنتج<input type="file" accept="image/*" data-k="${AC}" data-i="${i}" onchange="up(this)"></label><button class="btn danger" onclick="delp(${i})">حذف المنتج</button></div>`).join('')}<button class="btn" onclick="addp()">+ إضافة منتج</button>`:''}`;
 }
 async function adminLogout(){await sb.auth.signOut();adminUser=null;adminClose();const g=$('#gear');if(g)g.remove();const ap=$('#ap');if(ap)ap.remove();toast('تم تسجيل الخروج');}
+
+/* ===== Customer order tracking ===== */
+function closeOrderTracking(){
+ if(trackingTimer){clearInterval(trackingTimer);trackingTimer=null;}
+ const modal=document.getElementById('sh-track-modal');if(modal)modal.remove();
+}
+function trackOrderOpen(orderNumber='',phone=''){
+ if(!sb){toast('استني لحظة لحد ما الاتصال يجهز');return;}
+ closeOrderTracking();
+ const modal=document.createElement('div');
+ modal.id='sh-track-modal';modal.className='sh-track-back';modal.setAttribute('dir','rtl');
+ modal.innerHTML=`<section class="sh-track-box" role="dialog" aria-modal="true" aria-labelledby="sh-track-title">
+  <button class="sh-track-close" type="button" onclick="closeOrderTracking()" aria-label="إغلاق">×</button>
+  <div class="sh-track-mark">📦</div>
+  <h2 id="sh-track-title">تابع طلبك</h2>
+  <p class="sh-track-intro">اكتبي رقم الطلب ورقم الموبايل المسجل وقت الشراء لمعرفة آخر تحديث.</p>
+  <form onsubmit="trackOrderSearch(event)">
+   <label>رقم الطلب<input id="sh-track-number" inputmode="numeric" required placeholder="مثال: 37" value="${esc(String(orderNumber||''))}"></label>
+   <label>رقم الموبايل<input id="sh-track-phone" type="tel" required placeholder="رقم الموبايل المستخدم في الطلب" value="${esc(String(phone||''))}"></label>
+   <button class="sh-track-submit" type="submit">عرض حالة الطلب</button>
+  </form>
+  <div id="sh-track-result" aria-live="polite"></div>
+  <small class="sh-track-privacy">بيانات الطلب لا تظهر إلا عند إدخال رقم الطلب ورقم الهاتف المطابقين.</small>
+ </section>`;
+ modal.addEventListener('click',e=>{if(e.target===modal)closeOrderTracking();});
+ document.body.appendChild(modal);
+ if(orderNumber&&phone)setTimeout(()=>trackOrderSearch(null),120);
+}
+function trackingStatusView(order){
+ const labels=['طلب جديد','قيد التنفيذ','خرج للتوصيل','تم التسليم'];
+ const status=String(order.status||'pending');
+ if(status==='cancelled')return `<div class="sh-track-cancel">هذا الطلب ملغي. لو عندك استفسار تواصلي مع Snack House.</div>`;
+ let active=status==='delivered'?3:status==='out_for_delivery'?2:(status==='preparing'||status==='confirmed')?1:0;
+ const steps=labels.map((label,i)=>`<div class="sh-track-step ${i<=active?'is-done':''} ${i===active?'is-current':''}">
+  <span>${i<active?'✓':i===active?'●':i+1}</span><b>${label}</b>
+ </div>`).join('');
+ const updated=order.updated_at||order.created_at;
+ return `<div class="sh-track-progress">${steps}</div>
+  <div class="sh-track-current"><small>حالة طلبك الحالية</small><strong>${labels[active]}</strong>
+  <span>آخر تحديث: ${updated?new Date(updated).toLocaleString('ar-EG'):'—'}</span></div>
+  ${order.items&&order.items.length?`<div class="sh-track-items"><b>ملخص المنتجات</b>${order.items.map(i=>`<div><span>${esc(i.product_name)} × ${i.quantity}</span></div>`).join('')}</div>`:''}
+  ${order.total!=null?`<div class="sh-track-total">إجمالي الطلب <b>${Number(order.total).toLocaleString('ar-EG')} ج.م</b></div>`:''}
+  <button type="button" class="sh-track-refresh" onclick="trackOrderSearch(null,true)">تحديث الحالة الآن</button>`;
+}
+async function trackOrderSearch(e,silent=false){
+ if(e)e.preventDefault();
+ const number=document.getElementById('sh-track-number')?.value.trim();
+ const phone=document.getElementById('sh-track-phone')?.value.trim();
+ const result=document.getElementById('sh-track-result');
+ if(!number||!/^\d+$/.test(number)||!phone){if(result)result.innerHTML='<p class="sh-track-error">اكتبي رقم طلب صحيح ورقم الموبايل.</p>';return;}
+ if(!silent&&result)result.innerHTML='<p class="sh-track-loading">جارٍ البحث عن طلبك...</p>';
+ try{
+  const {data,error}=await sb.rpc('track_order',{p_order_number:Number(number),p_phone:phone});
+  if(error)throw error;
+  const order=Array.isArray(data)?data[0]:data;
+  if(!order){
+   if(result)result.innerHTML='<p class="sh-track-error">مش لاقيين طلب بالرقم ورقم الموبايل دول. راجعي البيانات وحاولي تاني.</p>';
+   if(trackingTimer){clearInterval(trackingTimer);trackingTimer=null;}
+   return;
+  }
+  if(result)result.innerHTML=trackingStatusView(order);
+  if(trackingTimer)clearInterval(trackingTimer);
+  trackingTimer=setInterval(()=>trackOrderSearch(null,true),20000);
+ }catch(err){
+  console.error('Order tracking:',err);
+  if(!silent&&result)result.innerHTML=`<p class="sh-track-error">تعذر جلب حالة الطلب: ${esc(err.message||'حاولي مرة أخرى.')}</p>`;
+ }
+}
+
 function checkoutOpen(){
  if(!sb){toast('استني لحظة لحد ما الاتصال يجهز');return;}
  if(!Object.keys(C).some(k=>C[k]>0)){toast('السلة فاضية');return;}
@@ -468,6 +604,8 @@ async function submitOrder(e){
   const savedOrder=Array.isArray(data)?data[0]:data;
   if(!savedOrder)throw new Error('لم يصل تأكيد من قاعدة البيانات. راجعي الطلبات قبل إعادة المحاولة.');
   Object.keys(C).forEach(k=>delete C[k]);BX=[];CLOSED=false;Object.keys(BXS).forEach(k=>delete BXS[k]);
+  lastCreatedOrderNumber=String(savedOrder.order_number||savedOrder.id||'');
+  lastCreatedPhone=$('#coPhone').value.trim();
   const safeNumber=esc(String(savedOrder.order_number||savedOrder.id||'—'));
   const total=Number(savedOrder.total);
   const finalTotal=Number.isFinite(total)?total:subtotal;
@@ -502,7 +640,7 @@ async function submitOrder(e){
      </div>
     </section>
     <div class="sh-confirm-actions">
-     <button class="sh-confirm-secondary" type="button" onclick="alert('رقم طلبك هو: ${safeNumber}\\nاحتفظي بالرقم لمتابعة طلبك مع Snack House.')">طلباتي</button>
+     <button class="sh-confirm-secondary" type="button" onclick="trackOrderOpen(lastCreatedOrderNumber,lastCreatedPhone)">طلباتي</button>
      <button class="sh-confirm-primary" type="button" onclick="document.getElementById('sh-order-success')?.remove();go('home')">متابعة التسوق</button>
     </div>
    </div>
@@ -519,4 +657,5 @@ async function submitOrder(e){
 }
 
 {const h=location.hash.slice(1);render();initSupabase()}</script>
+
 </body></html>
