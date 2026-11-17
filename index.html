@@ -204,6 +204,38 @@ input,select,textarea{color:var(--ink)}.sr input{color:var(--ink)}#ap input,#ap 
 <style id="snack-supabase-ui">
 #gear{position:fixed;z-index:10020;left:18px;bottom:18px;border:0;border-radius:50%;width:52px;height:52px;background:#6b0f3a;color:#fff;font-size:23px;box-shadow:0 6px 22px #0003;cursor:pointer}#ap{position:fixed;z-index:10030;top:0;right:0;height:100dvh;width:min(460px,94vw);overflow:auto;background:#fff;color:#24151d;box-shadow:-12px 0 45px #0002;padding:22px;transform:translateX(110%);transition:transform .25s;font-family:inherit}#ap.on{transform:translateX(0)}#ap h3{margin:12px 0 18px;color:#6b0f3a}#ap h4{margin:22px 0 10px;color:#6b0f3a}#ap label,.checkout-box label{display:block;margin:10px 0;font-size:14px;font-weight:600}#ap input:not([type=checkbox]),#ap select,#checkoutModal input,#checkoutModal textarea{display:block;width:100%;box-sizing:border-box;margin-top:6px;padding:11px;border:1px solid #e5d9df;border-radius:10px;background:#fff;color:#24151d;font:inherit}#ap input[type=file]{font-size:12px}#ap .btn{border:0;border-radius:10px;background:#6b0f3a;color:#fff;padding:11px 15px;margin:5px 4px 5px 0;cursor:pointer;font:inherit}#ap .danger{background:#a21d2b}#ap .admin-msg{font-size:13px;color:#8a3155;line-height:1.6}#ap .admin-product,.order-card{border:1px solid #eadfe4;border-radius:13px;padding:12px;margin:14px 0;background:#fffafc}#ap .admin-product b{color:#6b0f3a}#ap .row{display:grid;grid-template-columns:1fr 80px;gap:6px;align-items:end}#ap .order-head{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap}#ap .order-card p{margin:8px 0;line-height:1.5}#ap .order-card ul{padding-right:20px;line-height:1.7}.checkout-back{display:none;position:fixed;z-index:10050;inset:0;background:#160b12a8;align-items:center;justify-content:center;padding:16px}.checkout-back.on{display:flex}.checkout-box{position:relative;background:#fff;border-radius:18px;padding:24px;width:min(480px,100%);max-height:90dvh;overflow:auto;color:#24151d;box-shadow:0 20px 60px #0003}.checkout-box h3{margin:0 0 8px;color:#6b0f3a}.checkout-box p{font-size:14px;color:#75636b}.checkout-box textarea{min-height:76px;resize:vertical}.checkout-box .btn{width:100%;border:0;border-radius:10px;padding:13px;background:#6b0f3a;color:#fff;font:inherit;cursor:pointer}.checkout-x{position:absolute;left:16px;top:16px;border:0;background:none;font-size:20px;cursor:pointer}
 </style>
+
+
+
+<style id="snack-order-confirmation">
+#sh-confirm-page{position:fixed;inset:0;z-index:200100;overflow:auto;background:var(--bg);padding:22px 16px 36px;color:var(--ink);font-family:Tajawal,system-ui,sans-serif}
+.sh-confirm-wrap{width:min(880px,100%);margin:0 auto}
+.sh-confirm-head{text-align:center;margin:0 auto 34px}
+.sh-confirm-check{width:96px;height:96px;margin:0 auto 22px;border-radius:50%;display:grid;place-items:center;background:#7b173e;color:white;font-size:48px;box-shadow:0 9px 18px #6b0f3a30}
+.sh-confirm-head h1{font:400 clamp(2rem,5vw,3.2rem) 'Readex Pro',Tajawal,sans-serif;margin-bottom:8px}
+.sh-confirm-head p{color:var(--mut);font-size:1.05rem}
+.sh-confirm-card{background:#fffdfb;border:1px solid #e9e1dc;border-radius:30px;overflow:hidden}
+.sh-confirm-top{display:flex;justify-content:space-between;gap:20px;padding:22px 26px;background:#faf7f2;border-bottom:1px solid #e9e1dc}
+.sh-confirm-meta small{display:block;color:#a48e82;font-weight:800;margin-bottom:5px}
+.sh-confirm-meta strong{font-size:1.35rem;font-weight:600}
+.sh-confirm-total{color:#7b173e}
+.sh-confirm-info{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;padding:22px 26px;border-bottom:1px solid #eee7e2}
+.sh-confirm-info small{display:block;color:#a48e82;font-weight:800;margin-bottom:7px}
+.sh-confirm-info div{line-height:1.6;overflow-wrap:anywhere}
+.sh-confirm-items{padding:22px 26px}
+.sh-confirm-label{color:#a48e82;font-weight:800;margin-bottom:14px}
+.sh-confirm-item,.sh-confirm-sum{display:flex;justify-content:space-between;gap:14px;padding:8px 0}
+.sh-confirm-item span:first-child{color:#493a40}
+.sh-confirm-divider{border-top:1px solid #eee7e2;margin:12px 0}
+.sh-confirm-sum{color:#897a80}
+.sh-confirm-sum b{color:var(--ink);font-weight:600}
+.sh-confirm-grand{display:flex;justify-content:space-between;align-items:center;padding-top:14px;font-size:1.35rem;font-weight:800}
+.sh-confirm-actions{display:flex;justify-content:center;gap:14px;flex-wrap:wrap;margin:28px 0 0}
+.sh-confirm-actions button{border-radius:99px;padding:15px 30px;font:800 1rem Tajawal;cursor:pointer}
+.sh-confirm-primary{border:0;background:var(--ink);color:#fff}
+.sh-confirm-secondary{border:1px solid #d7cbc5;background:transparent;color:var(--ink)}
+@media(max-width:600px){.sh-confirm-head{margin-bottom:24px}.sh-confirm-check{width:78px;height:78px;font-size:40px}.sh-confirm-top{padding:18px;gap:10px}.sh-confirm-meta strong{font-size:1.05rem}.sh-confirm-info{grid-template-columns:1fr;gap:12px;padding:18px}.sh-confirm-items{padding:18px}.sh-confirm-card{border-radius:22px}.sh-confirm-actions button{flex:1;padding:14px 16px}}
+</style>
 </head>
 <body data-t="home">
 <div id="app"></div>
@@ -404,14 +436,11 @@ async function submitOrder(e){
  const form=e.currentTarget,btn=form.querySelector('button[type=submit]'),msg=$('#checkoutMsg');
  if(!sb){msg.textContent='الاتصال بقاعدة البيانات غير جاهز. حدّثي الصفحة وحاولي مرة أخرى.';msg.style.cssText='display:block;color:#b42336;font-weight:700;margin-top:12px';return;}
  orderSubmitting=true;btn.disabled=true;btn.textContent='جارٍ تأكيد الطلب...';
- // نغلق نموذج البيانات فورًا ونُظهر حالة استلام الطلب بدل ترك العميل أمام زر لا يستجيب.
  const oldStatus=document.getElementById('sh-order-success');if(oldStatus)oldStatus.remove();
  const status=document.createElement('div');status.id='sh-order-success';status.setAttribute('role','status');status.setAttribute('aria-live','polite');
  status.style.cssText='position:fixed;z-index:200000;inset:0;display:flex;align-items:center;justify-content:center;padding:20px;background:rgba(20,8,14,.62);';
- status.innerHTML='<div dir="rtl" style="width:min(420px,100%);box-sizing:border-box;background:#fff;border-radius:20px;padding:30px 22px;text-align:center;box-shadow:0 18px 60px #0004;color:#24151d"><div style="font-size:42px;line-height:1.2;margin-bottom:12px">⏳</div><div style="font-size:21px;font-weight:900;color:#6b0f3a">تم استلام طلبك</div><div style="font-size:14px;color:#75636b;margin-top:10px">بنأكد الطلب دلوقتي، لحظات من فضلك…</div></div>';
- document.body.appendChild(status);
- checkoutClose();
- let savedOrder=null;
+ status.innerHTML='<div dir="rtl" style="width:min(420px,100%);box-sizing:border-box;background:#fff;border-radius:20px;padding:30px 22px;text-align:center;box-shadow:0 18px 60px #0004;color:#24151d"><div style="font-size:42px;line-height:1.2;margin-bottom:12px">⏳</div><div style="font-size:21px;font-weight:900;color:#6b0f3a">جارٍ تأكيد طلبك</div><div style="font-size:14px;color:#75636b;margin-top:10px">لحظات من فضلك…</div></div>';
+ document.body.appendChild(status);checkoutClose();
  try{
   const quantities={};
   for(const [id,q] of Object.entries(C)){
@@ -419,13 +448,15 @@ async function submitOrder(e){
    if(id.startsWith('box:')&&BXS[id]){for(const child of BXS[id].items)quantities[child]=(quantities[child]||0)+q;}
    else quantities[id]=(quantities[id]||0)+q;
   }
-  const items=[];
+  const items=[],preview=[];
   for(const [id,quantity] of Object.entries(quantities)){
-   const [k,ix]=id.split(':');const pid=DB_IDS[k]&&DB_IDS[k][Number(ix)];
+   const [k,ix]=id.split(':');const index=Number(ix),pid=DB_IDS[k]&&DB_IDS[k][index],product=T[k]&&T[k].p_&&T[k].p_[index];
    if(!pid)throw new Error('المنتجات لسه بتتجهز على قاعدة البيانات. حدّثي الصفحة بعد ما المدير يحفظ المنتجات.');
    items.push({product_id:pid,quantity});
+   if(product)preview.push({name:product[0],quantity,price:Number(product[2])||0,line:(Number(product[2])||0)*quantity});
   }
   if(!items.length)throw new Error('السلة فاضية. أضيفي منتجات قبل تأكيد الطلب.');
+  const subtotal=preview.reduce((sum,item)=>sum+item.line,0);
   const {data,error}=await sb.rpc('create_order',{
    p_customer_name:$('#coName').value.trim(),
    p_phone:$('#coPhone').value.trim(),
@@ -434,17 +465,52 @@ async function submitOrder(e){
    p_items:items
   });
   if(error)throw error;
-  savedOrder=Array.isArray(data)?data[0]:data;
-  // لا نمسح السلة إلا بعد تأكيد قاعدة البيانات نجاح الحفظ.
-
-Object.keys(C).forEach(k=>delete C[k]);BX=[];CLOSED=false;Object.keys(BXS).forEach(k=>delete BXS[k]);
-  const number=savedOrder&&savedOrder.order_number?`<div style="margin-top:8px;font-size:14px;font-weight:600">رقم الطلب: ${String(savedOrder.order_number).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}</div>`:'';
-  status.innerHTML=`<div dir="rtl" style="width:min(420px,100%);box-sizing:border-box;background:#fff;border-radius:20px;padding:30px 22px;text-align:center;box-shadow:0 18px 60px #0004;color:#24151d"><div style="font-size:46px;line-height:1.2;margin-bottom:12px">✓</div><div style="font-size:22px;font-weight:900;color:#16834a">تم تأكيد طلبك بنجاح ❤️</div>${number}<div style="font-size:13px;color:#75636b;margin-top:12px">شكرًا لطلبك من Snack House</div></div>`;
+  const savedOrder=Array.isArray(data)?data[0]:data;
+  if(!savedOrder)throw new Error('لم يصل تأكيد من قاعدة البيانات. راجعي الطلبات قبل إعادة المحاولة.');
+  Object.keys(C).forEach(k=>delete C[k]);BX=[];CLOSED=false;Object.keys(BXS).forEach(k=>delete BXS[k]);
+  const safeNumber=esc(String(savedOrder.order_number||savedOrder.id||'—'));
+  const total=Number(savedOrder.total);
+  const finalTotal=Number.isFinite(total)?total:subtotal;
+  const shipping=Math.max(0,finalTotal-subtotal);
+  const itemRows=preview.map(item=>`<div class="sh-confirm-item"><span>${esc(item.name)} × ${item.quantity}</span><b>${item.line.toLocaleString('ar-EG')} ج.م</b></div>`).join('');
+  status.style.cssText='position:fixed;z-index:200000;inset:0;display:block;padding:0;background:var(--bg);overflow:auto;';
+  status.innerHTML=`<main id="sh-confirm-page" dir="rtl">
+   <div class="sh-confirm-wrap">
+    <div class="sh-confirm-head">
+     <div class="sh-confirm-check">✓</div>
+     <h1>تم تأكيد طلبك!</h1>
+     <p>شكرًا لطلبك — بنجهز طلبك الآن.</p>
+    </div>
+    <section class="sh-confirm-card">
+     <div class="sh-confirm-top">
+      <div class="sh-confirm-meta"><small>رقم الطلب</small><strong dir="ltr">${safeNumber}</strong></div>
+      <div class="sh-confirm-meta"><small>إجمالي الطلب</small><strong class="sh-confirm-total">${finalTotal.toLocaleString('ar-EG')} ج.م</strong></div>
+     </div>
+     <div class="sh-confirm-info">
+      <div><small>طريقة الدفع</small><div>الدفع عند الاستلام</div></div>
+      <div><small>التوصيل إلى</small><div>${esc($('#coAddress').value.trim())}</div></div>
+      <div><small>التوصيل المتوقع</small><div>سيتم التواصل معك لتأكيد موعد التوصيل</div></div>
+     </div>
+     <div class="sh-confirm-items">
+      <div class="sh-confirm-label">ملخص الطلب</div>
+      ${itemRows}
+      <div class="sh-confirm-divider"></div>
+      <div class="sh-confirm-sum"><span>المجموع الفرعي</span><b>${subtotal.toLocaleString('ar-EG')} ج.م</b></div>
+      <div class="sh-confirm-sum"><span>التوصيل</span><b>${shipping.toLocaleString('ar-EG')} ج.م</b></div>
+      <div class="sh-confirm-divider"></div>
+      <div class="sh-confirm-grand"><span>الإجمالي</span><span>${finalTotal.toLocaleString('ar-EG')} ج.م</span></div>
+     </div>
+    </section>
+    <div class="sh-confirm-actions">
+     <button class="sh-confirm-secondary" type="button" onclick="alert('رقم طلبك هو: ${safeNumber}\\nاحتفظي بالرقم لمتابعة طلبك مع Snack House.')">طلباتي</button>
+     <button class="sh-confirm-primary" type="button" onclick="document.getElementById('sh-order-success')?.remove();go('home')">متابعة التسوق</button>
+    </div>
+   </div>
+  </main>`;
   try{render(1);closeAll();}catch(uiErr){console.error('Snack House post-order UI error:',uiErr);}
-  setTimeout(()=>{const el=document.getElementById('sh-order-success');if(el)el.remove();},2500);
  }catch(err){
   console.error('Snack House order error:',err);
-  status.innerHTML=`<div dir="rtl" style="width:min(420px,100%);box-sizing:border-box;background:#fff;border-radius:20px;padding:26px 22px;text-align:center;box-shadow:0 18px 60px #0004;color:#24151d"><div style="font-size:38px;margin-bottom:10px">⚠️</div><div style="font-size:20px;font-weight:900;color:#b42336">تعذر تأكيد الطلب</div><div style="font-size:14px;color:#75636b;margin:10px 0 16px">${String(err&&err.message?err.message:'حصلت مشكلة أثناء إرسال الطلب.').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}</div><button id="sh-order-retry" style="border:0;border-radius:10px;background:#6b0f3a;color:#fff;padding:12px 18px;font:inherit;cursor:pointer">العودة لبيانات الطلب</button></div>`;
+  status.innerHTML=`<div dir="rtl" style="width:min(420px,100%);box-sizing:border-box;background:#fff;border-radius:20px;padding:26px 22px;text-align:center;box-shadow:0 18px 60px #0004;color:#24151d;margin:12vh auto"><div style="font-size:38px;margin-bottom:10px">⚠️</div><div style="font-size:20px;font-weight:900;color:#b42336">تعذر تأكيد الطلب</div><div style="font-size:14px;color:#75636b;margin:10px 0 16px">${String(err&&err.message?err.message:'حصلت مشكلة أثناء إرسال الطلب.').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}</div><button id="sh-order-retry" style="border:0;border-radius:10px;background:#6b0f3a;color:#fff;padding:12px 18px;font:inherit;cursor:pointer">العودة لبيانات الطلب</button></div>`;
   document.getElementById('sh-order-retry').onclick=()=>{status.remove();checkoutOpen();const b=$('#checkoutModal form button[type=submit]');if(b){b.disabled=false;b.textContent='تأكيد الطلب';}const m=$('#checkoutMsg');if(m){m.textContent='راجعي البيانات وحاولي مرة أخرى.';m.style.cssText='display:block;color:#b42336;font-weight:700;margin-top:12px';}};
  }finally{
   orderSubmitting=false;
