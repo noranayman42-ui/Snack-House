@@ -9,7 +9,7 @@
  box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
 html{scroll-padding-top:110px;scroll-behavior:smooth}
 *{box-sizing:border-box;margin:0}
-body{font-family:Tajawal,system-ui,sans-serif;background:var(--bg);color:var(--ink);overflow-x:hidden}
+body{font-family:Tajawal,system-ui,sans-serif;background:var(--bg);color:var(--ink);overflow-x:clip}
 button{font:inherit;cursor:pointer;color:inherit}
 :focus-visible{outline:3px solid var(--amber);outline-offset:2px}
 .wrap{padding:0 clamp(14px,3.5vw,44px)}
@@ -144,6 +144,60 @@ body.nomo *{animation:none!important}body.nomo .rv{opacity:1;transform:none}
 #ap input:not([type=checkbox]):not([type=file]),#ap select{width:100%;padding:6px;margin:3px 0 8px;border:1px solid #ccc;border-radius:8px;font:inherit}
 #ap label{display:block;font-size:.82rem}#ap h4{margin:14px 0 6px}#ap .row{border:1px solid #ddd;border-radius:10px;padding:8px;margin-bottom:8px}
 #ap .btn{margin:3px 2px;padding:6px 14px;background:#222;color:#fff;border:0;border-radius:99px}
+.build{align-items:stretch}.build .tx .cnt{font:300 2.2rem 'Readex Pro',sans-serif;color:var(--wine)}.build .tx .cnt b{font-weight:600}
+.pks{display:grid;grid-template-columns:repeat(auto-fill,minmax(88px,1fr));gap:8px;max-height:300px;overflow:auto;padding:4px;width:100%}
+.pk{border:1px solid var(--line);background:#fff;border-radius:14px;padding:6px;display:flex;flex-direction:column;gap:4px;align-items:center;transition:transform .2s,border-color .2s}
+.pk:hover:not(:disabled){transform:translateY(-3px);border-color:var(--wine)}.pk:disabled{opacity:.4;cursor:default}
+.pm{width:100%;aspect-ratio:1;display:grid;place-items:center;font-size:2rem}.pm img{width:100%;height:100%;object-fit:contain}
+.pk small{font-size:.64rem;line-height:1.25;text-align:center;max-height:2.5em;overflow:hidden}
+.bxv{display:grid;place-items:center;padding:36px 28px;background:linear-gradient(135deg,#ffe0ec,#fff1c2);min-height:340px}
+.bxw{position:relative;width:min(100%,400px)}
+.bxb{background:linear-gradient(160deg,#8a1c4d,#4a0f2c);padding:16px;border-radius:20px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;box-shadow:0 24px 40px #0004,inset 0 0 0 6px #6b0f3a}
+.sl{position:relative;aspect-ratio:1;min-width:0;min-height:0;overflow:hidden;border-radius:14px;background:#00000030;display:grid;place-items:center;color:#fff6;font:600 1.4rem 'Readex Pro',sans-serif}.sl.f{background:#ffffff24}
+.si{position:absolute;inset:6%;display:grid;place-items:center;font-size:2.4rem}.si.pop{animation:pop .55s cubic-bezier(.34,1.56,.64,1)}
+.si img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 6px 8px #0006)}
+@keyframes pop{from{transform:translateY(-70px) scale(.4);opacity:0}to{transform:none;opacity:1}}
+.sl button{position:absolute;z-index:3;top:3px;inset-inline-end:3px;width:22px;height:22px;border-radius:50%;border:0;background:#fff;color:#222;font-size:.7rem;line-height:1}
+.lid{position:absolute;inset:-8px;border-radius:24px;background:linear-gradient(135deg,#d9a066,#b07a3f);box-shadow:0 20px 40px #0005;display:grid;place-items:center;overflow:hidden;transform:translateY(-150%) rotate(-10deg);opacity:0;pointer-events:none}
+.closed .sl button{display:none}.lid{z-index:5}
+.closed .lid{transform:none;opacity:1;transition:transform .9s cubic-bezier(.3,1.5,.5,1),opacity .3s}
+.rb{position:absolute;inset-block:0;left:50%;width:46px;margin-left:-23px;background:var(--wine);opacity:.92}.rb2{position:absolute;inset-inline:0;top:50%;height:46px;margin-top:-23px;background:var(--wine);opacity:.92}
+.lid span{position:relative;z-index:2;background:#fffd;color:var(--wine);padding:6px 18px;border-radius:99px;font:600 1rem 'Readex Pro',sans-serif}
+.cta2{display:flex;gap:10px;flex-wrap:wrap}
+.bd{position:fixed;inset:0;z-index:70;background:var(--bg);display:none;overflow:auto;padding:16px clamp(14px,4vw,50px)}.bd.on{display:block}
+.bdh{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}.bdh h2{font-size:2rem}
+.bdl{display:grid;grid-template-columns:1.3fr 1fr;gap:24px;align-items:start}
+.bdp .pks{max-height:none;overflow:visible;grid-template-columns:repeat(auto-fill,minmax(110px,1fr))}
+.pk b{font-size:.7rem;color:var(--wine)}
+.bdv{position:sticky;top:8px;background:linear-gradient(135deg,#ffe0ec,#fff1c2);border-radius:26px;padding:28px 22px;text-align:center;max-height:calc(100vh - 100px);overflow:auto}
+.sl.hint{background:none;border:2px dashed #fff5;color:#fff8;font-size:2rem}
+.bdv .b1:disabled{opacity:.4}
+@media(max-width:860px){.bdl{grid-template-columns:1fr}.bdv{position:static;order:-1;max-height:none}}
+.mbx{display:block;width:100%;height:100%;border-radius:12px;background:linear-gradient(135deg,#d9a066,#b07a3f);position:relative;box-shadow:0 3px 8px #0003}
+.mbx:before{content:"";position:absolute;inset-block:0;left:50%;width:9px;margin-left:-4px;background:var(--wine)}.mbx:after{content:"";position:absolute;inset-inline:0;top:50%;height:9px;margin-top:-4px;background:var(--wine)}
+.dr .it small{color:var(--mut);font-size:.72rem;line-height:1.5;display:block;margin-top:2px}
+.si img{object-fit:cover;border-radius:10px}.si img[src^="data:image/webp"]{object-fit:contain;border-radius:0}
+html{overflow-x:clip}
+.cartb svg{flex:none}
+.mb{display:none}
+.mnl{display:block;width:100%;text-align:start;border:0;background:none;padding:14px 8px;font-size:1.05rem;font-weight:700;border-bottom:1px solid var(--line)}.mnl:hover{background:var(--pink)}
+.sr{max-height:92vh;overflow:auto;padding-top:calc(20px + env(safe-area-inset-top,0px))}
+.srh{display:flex;gap:10px;align-items:center}.srh input{flex:1;min-width:0}
+.srx{border:0;background:var(--pink);width:42px;height:42px;border-radius:50%;font-size:1.1rem;flex:none}
+.srrow{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--line)}
+.srm{width:56px;height:56px;border-radius:12px;background:#f4eef0;display:grid;place-items:center;overflow:hidden;font-size:1.8rem;flex:none}.srm img{width:100%;height:100%;object-fit:contain}
+.srrow div{flex:1;min-width:0}.srrow b{display:block;font-size:.92rem}.srrow small{color:var(--mut);font-size:.72rem}.srp{font-weight:800;font-size:.9rem;white-space:nowrap}
+.sre{padding:20px 0;color:var(--mut)}.srall{margin-top:12px}
+@media(max-width:860px){
+ .mb{display:grid}.ib.acc{display:none}
+ header{padding:8px 12px;gap:8px}.lgi{height:50px;width:50px}.logo small{display:none}
+ .ib{width:38px;height:38px}.cartb{height:38px;padding:0 12px;gap:6px}
+ .ic{gap:2px}
+ .ann{font-size:.72rem}.lang{display:none}
+ .hero{padding:36px 16px;min-height:0}.hero h1{font-size:2rem}
+ .sec{padding-top:36px}
+}
+input,select,textarea{color:var(--ink)}.sr input{color:var(--ink)}#ap input,#ap select,#ap textarea{color:#222}
 </style><style>artifact-sync,artifact-local{display:contents}</style><style>artifact-sync,artifact-local{display:contents}</style>
 <style>artifact-sync,artifact-local{display:contents}</style><style>artifact-sync,artifact-local{display:contents}</style><style>artifact-sync,artifact-local{display:contents}</style><style>artifact-sync,artifact-local{display:contents}</style><style>artifact-sync,artifact-local{display:contents}</style><style>artifact-sync,artifact-local{display:contents}</style><style>artifact-sync,artifact-local{display:contents}</style><style>artifact-sync,artifact-local{display:contents}</style><style>artifact-sync,artifact-local{display:contents}</style><style>artifact-sync,artifact-local{display:contents}</style><style>artifact-sync,artifact-local{display:contents}</style><style>artifact-sync,artifact-local{display:contents}</style></head>
 <body data-t="home">
@@ -167,6 +221,31 @@ const R={v:'home',cat:'',sub:'',q:'',mode:'',sort:'pop',max:0,br:[]},C={},W=new 
 const P=()=>Object.entries(T).flatMap(([k,t])=>t.p_.map((p,i)=>({k,i,p,id:k+':'+i})));
 const nm=p=>({n:p[0],sub:p[1],pr:+p[2]||0,e:p[3]||'🍬',img:p[4],br:p[5]||'Snack House',old:+p[6]||0,r:+p[7]||4.5,rv:+p[8]||40,nw:p[9]==='new'});
 function catImg(k){const t=T[k],im=t.p_.map(p=>p[4]).filter(Boolean);return t.img||im.find(u=>u.startsWith('data:image/webp'))||im[0]||''}
+
+let BX=[],CLOSED=false,LASTI=-1,BXF='',DM=null;
+function bxItem(id){const o=P().find(x=>x.id===id);return o?nm(o.p):null}
+function demoImgs(){const ex=new Set(S.cart||[]),out=[],L=Object.values(T).map(t=>t.p_.map(p=>p[4]).filter(u=>u&&!ex.has(u)));for(let r=0;out.length<6&&r<40;r++)L.forEach(l=>{if(out.length<6&&l[r*2+1])out.push(l[r*2+1])});for(let r=0;out.length<6&&r<40;r++)L.forEach(l=>{if(out.length<6&&l[r*2]&&!out.includes(l[r*2]))out.push(l[r*2])});return out}
+function demoStart(){clearInterval(DM);let t=0;const imgs=demoImgs();
+ DM=setInterval(()=>{const w=$('#dw');if(!w){clearInterval(DM);return}const sl=w.querySelectorAll('.sl');
+  if(t<6){const el=sl[t];el.classList.add('f');el.innerHTML=`<div class="si pop">${imgs[t]?`<img src="${imgs[t]}" alt="">`:'🍬'}</div>`}
+  else if(t===7)w.classList.add('closed');
+  else if(t===12){w.classList.remove('closed');sl.forEach((e,i)=>{e.classList.remove('f');e.innerHTML='<b>'+(i+1)+'</b>'});t=-1}
+  t++},800)}
+function bxOpen(){let o=$('#bd');if(!o){document.body.insertAdjacentHTML('beforeend','<div class="bd gen" id="bd"></div>');o=$('#bd')}bxDraw();o.classList.add('on');document.body.style.overflow='hidden'}
+function bxClose(){const o=$('#bd');if(o)o.classList.remove('on');document.body.style.overflow=''}
+function bxDraw(){const o=$('#bd'),ps=o.querySelector('.bdp'),st=ps?ps.scrollTop:0,tot=BX.reduce((a,id)=>{const p=bxItem(id);return a+(p?p.pr:0)},0);
+ const list=P().filter(x=>!BXF||x.k===BXF).map(x=>{const p=nm(x.p);return `<button class="pk" ${CLOSED?'disabled':''} onclick="bxAdd('${x.id}')"><span class="pm">${p.img?`<img src="${p.img}" alt="">`:p.e}</span><small>${esc(p.n)}</small><b>${p.pr} ج.م</b></button>`}).join('');
+ const chips=`<button class="${BXF?'':'on'}" onclick="BXF='';bxDraw()">الكل</button>`+Object.entries(T).map(([k,t])=>`<button class="${BXF===k?'on':''}" onclick="BXF='${k}';bxDraw()">${esc(t.n)}</button>`).join('');
+ const slots=BX.map((id,i)=>{const p=bxItem(id);return p?`<div class="sl f"><div class="si${i===LASTI?' pop':''}">${p.img?`<img src="${p.img}" alt="${esc(p.n)}">`:`<span>${p.e}</span>`}</div><button aria-label="إزالة" onclick="bxRm(${i})">✕</button></div>`:''}).join('')+(CLOSED?'':'<div class="sl hint"><b>+</b></div>');
+ o.innerHTML=`<div class="bdh"><h2>اصنع صندوقك</h2><button class="all" onclick="bxClose()">✕ إغلاق</button></div><div class="bdl"><div class="bdp"><p style="margin-bottom:10px;color:var(--mut)">${CLOSED?'الصندوق مقفول. افتحه لو عايز تضيف أو تشيل.':'دوس على أي منتج يتحط في الصندوق، وضيف براحتك.'}</p><div class="chips">${chips}</div><div class="pks">${list}</div></div>
+ <div class="bdv"><div class="bxw${CLOSED?' closed':''}" id="bdw"><div class="bxb">${slots}</div><div class="lid"><div class="rb"></div><div class="rb2"></div><span>Snack House</span></div></div><div class="cnt" style="margin:14px 0 4px"><b>${BX.length}</b> منتج · ${tot} ج.م</div>
+ <div class="cta2" style="justify-content:center">${CLOSED?`<button class="b1" style="background:var(--ink);color:#fff" onclick="bxCart()">أضف الصندوق للسلة</button><button class="b2" style="color:var(--ink);border-color:var(--line)" onclick="CLOSED=false;bxDraw()">افتح الصندوق</button>`:`<button class="b1" style="background:var(--ink);color:#fff" ${BX.length?'':'disabled'} onclick="bxLock()">اقفل الصندوق</button><button class="b2" style="color:var(--ink);border-color:var(--line)" onclick="BX=[];LASTI=-1;bxDraw()">فضّي الصندوق</button>`}</div></div></div>`;
+ const n=o.querySelector('.bdp');if(n)n.scrollTop=st}
+function bxAdd(id){if(CLOSED)return;BX.push(id);LASTI=BX.length-1;bxDraw()}
+function bxRm(i){BX.splice(i,1);LASTI=-1;bxDraw()}
+function bxLock(){if(!BX.length)return;const w=$('#bdw');if(w)w.classList.add('closed');setTimeout(()=>{CLOSED=true;bxDraw()},1000)}
+const BXS={};
+function bxCart(){const bid='box:'+Date.now().toString(36);BXS[bid]={items:[...BX]};C[bid]=1;const b=$('#cb');if(b){$('#cn').textContent=Object.values(C).reduce((a,c)=>a+c,0);b.classList.remove('bump');void b.offsetWidth;b.classList.add('bump')}bxClose();BX=[];CLOSED=false;LASTI=-1;toast('تمت إضافة الصندوق للسلة');cartO()}
 function card(o){const p=nm(o.p),d=p.old>p.pr?Math.round((1-p.pr/p.old)*100):0,g=T[o.k].g;
  return `<div class="pc rv"><div class="pi" style="background:linear-gradient(135deg,${g})">${p.img?`<img${p.img.startsWith('data:image/webp')?' class="tr"':''} src="${p.img}" alt="">`:`<span>${p.e}</span>`}${d?`<b class="pd">-${d}%</b>`:''}${p.nw?'<b class="pn">وصل حديثًا</b>':''}<div class="pa"><button class="${W.has(o.id)?'on':''}" aria-label="مفضلة" onclick="wish('${o.id}')">♥</button><button aria-label="عرض سريع" onclick="toast('${esc(p.n)} — ${p.pr} ج.م')">👁</button></div></div>
  <div class="pb"><span class="br">${esc(p.br)}</span><span class="pt">${esc(p.n)}</span><span class="st"><u>${'★'.repeat(Math.round(p.r))}</u> ${p.r} (${p.rv})</span><div class="pr"><button class="add" aria-label="أضف للسلة" onclick="addc('${o.id}')">+</button><div>${p.old>p.pr?`<s>${p.old} ج.م</s>`:''}${p.pr} ج.م</div></div></div></div>`}
@@ -175,7 +254,7 @@ function hdr(){const n=Object.values(C).reduce((a,b)=>a+b,0),ann=S.ann.split('|'
  return `<div class="ann"><button class="lang" onclick="toast('English soon')">ENGLISH</button><div class="mq"><div class="tr">${ann+ann+ann+ann}</div></div></div>
  <header><button class="logo" onclick="go('home')"><img class="lgi" src="${LOGO}" alt="Snack House"><small>كل لقمة تسعدك!</small></button>
  <nav>${nv('الرئيسية',"go('home')",R.v==='home')}${nv('كل المنتجات',"go('all')",R.v==='all'&&!R.mode&&!R.cat)}${nv('الأقسام',"go('home','cats')",0)}${nv('وصل حديثًا',"go('all',{mode:'new'})",R.mode==='new')}</nav>
- <div class="ic"><button class="ib" aria-label="بحث" onclick="srch()">🔍</button><button class="ib" aria-label="حسابي" onclick="toast('تسجيل الدخول قريبًا')">👤</button><button class="ib" aria-label="المفضلة" onclick="go('all',{mode:'wish'})">♡${W.size?`<i>${W.size}</i>`:''}</button><button class="cartb" id="cb" onclick="cartO()">🛍 ${n}</button></div></header>`}
+ <div class="ic"><button class="ib mb" aria-label="القائمة" onclick="menuO()">☰</button><button class="ib" aria-label="بحث" onclick="srch()">🔍</button><button class="ib acc" aria-label="حسابي" onclick="toast('تسجيل الدخول قريبًا')">👤</button><button class="ib" aria-label="المفضلة" onclick="go('all',{mode:'wish'})">♡${W.size?`<i>${W.size}</i>`:''}</button><button class="cartb" id="cb" onclick="cartO()" aria-label="السلة"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="20" r="1.4"/><circle cx="18" cy="20" r="1.4"/><path d="M2 3h3l2.6 12.2a1.5 1.5 0 0 0 1.5 1.2h8.7a1.5 1.5 0 0 0 1.5-1.1L21 8H6"/></svg><span id="cn">${n}</span></button></div></header>`}
 function cartScene(){const all=Object.entries(T).map(([k,t])=>t.p_.map(p=>({k,p})));const pick=(S.cart||[]).map(u=>({k:Object.keys(T)[0],p:['','',0,'🍬',u]}));
  for(let r=0;pick.length<6&&r<12;r++)all.forEach(l=>{const x=l.filter(o=>o.p[4])[r];if(x&&pick.length<6)pick.push(x)});
  if(pick.length<6)all.forEach(l=>l.filter(o=>!o.p[4]).slice(0,2).forEach(o=>{if(pick.length<6)pick.push(o)}));
@@ -188,10 +267,10 @@ function home(){const hot=P().sort((a,b)=>nm(b.p).rv-nm(a.p).rv).slice(0,4),ks=O
  <div class="cats">${ks.map(k=>`<button class="cat rv" onclick="go('all',{cat:'${k}'})"><div class="c" style="background:linear-gradient(135deg,${T[k].g})">${catImg(k)?`<img${catImg(k).startsWith('data:image/webp')?' class="tr"':''} src="${catImg(k)}" alt="">`:T[k].e}</div>${esc(T[k].n)}</button>`).join('')}</div></section>
  <section class="sec"><div class="sh rv"><div><span class="eye">Hot right now</span><h2>الأكثر رواجًا الآن</h2><p>ما يتناوله الجميع هذه الأيام.</p></div><button class="all" onclick="go('all')">عرض الكل ←</button></div><div class="grid">${hot.map(card).join('')}</div></section>
  <section class="sec"><div class="feat"><div class="fb rv" style="background:linear-gradient(160deg,#ff5fa2,#6b2fd0)" onclick="go('all')"><span class="em">🎁</span><small>صندوق السناكس</small><h3>الصندوق الغامض</h3><span>سناكس مفاجأة مختارة بعناية — تسوّق الآن ←</span></div><div class="fb rv" style="background:linear-gradient(160deg,#d62b2b,#3b0d0d)" onclick="go('all',{cat:'chips',sub:'فشار'})"><span class="em">🍿</span><small>صندوق السناكس</small><h3>ليلة الفيلم</h3><span>فشار وسناكس لسهرة مميزة — تسوّق الآن ←</span></div></div></section>
- <div class="build rv"><div class="tx"><span class="eye">Build your box</span><h2>buildBox</h2><p>اختر أي 6 منتجات على ذوقك واحصل على خصم على الصندوق.</p><button class="b1" style="background:var(--ink);color:#fff" onclick="go('all');toast('اختر 6 منتجات وأضفها للسلة')">ابدأ التصميم</button></div><div class="mo">${['🍬','🍫','🍭','🍪','🥜','🍿','🧸','🍩','🍡','🥨','🍯','🍬'].map((e,i)=>`<span style="animation-delay:${-i*.4}s">${e}</span>`).join('')}</div></div>
+ <div class="build rv" id="bx"><div class="tx"><span class="eye">Build your box</span><h2>buildBox</h2><p>اختار من منتجاتنا اللي تحبها وإحنا نجهزلك صندوق مخصوص.</p><button class="b1" style="background:var(--ink);color:#fff" onclick="bxOpen()">اصنع صندوقك</button></div><div class="bxv"><div class="bxw" id="dw"><div class="bxb">${[1,2,3,4,5,6].map(i=>`<div class="sl"><b>${i}</b></div>`).join('')}</div><div class="lid"><div class="rb"></div><div class="rb2"></div><span>Snack House</span></div></div></div></div>
  <div class="news rv"><div><h2>كن أول من يعرف</h2><p>نكهات جديدة وعروض حصرية تصلك أولًا بأول.</p></div><form onsubmit="event.preventDefault();toast('تم الاشتراك، شكرًا!');this.reset()"><input type="email" required placeholder="بريدك الإلكتروني"><button>اشترك</button></form></div></div>`}
 function list(){let a=P(),t=R.cat?T[R.cat]:null;
- const base=a.filter(o=>(!R.cat||o.k===R.cat)&&(!R.sub||o.p[1]===R.sub)&&(R.mode!=='offers'||nm(o.p).old>nm(o.p).pr)&&(R.mode!=='new'||nm(o.p).nw)&&(R.mode!=='wish'||W.has(o.id))&&(!R.q||(o.p[0]+o.p[5]+o.p[1]).includes(R.q)));
+ const base=a.filter(o=>(!R.cat||o.k===R.cat)&&(!R.sub||o.p[1]===R.sub)&&(R.mode!=='offers'||nm(o.p).old>nm(o.p).pr)&&(R.mode!=='new'||nm(o.p).nw)&&(R.mode!=='wish'||W.has(o.id))&&(!R.q||sfind(R.q).some(x=>x.id===o.id)));
  const mx=Math.max(10,...a.map(o=>nm(o.p).pr)),cap=R.max||mx,brs=[...new Set(base.map(o=>nm(o.p).br))];
  let r=base.filter(o=>nm(o.p).pr<=cap&&(!R.br.length||R.br.includes(nm(o.p).br)));
  r.sort((x,y)=>R.sort==='lo'?nm(x.p).pr-nm(y.p).pr:R.sort==='hi'?nm(y.p).pr-nm(x.p).pr:nm(y.p).rv-nm(x.p).rv);
@@ -207,17 +286,27 @@ function foot(){return `<footer><div><b>Snack House</b><br>كل لقمة تسع�
 function render(keep){const y=scrollY;$('#app').innerHTML=hdr()+(R.v==='home'?home():list())+foot();document.body.classList.toggle('nomo',G);
  const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{threshold:.08});
  document.querySelectorAll('.rv').forEach((el,i)=>{el.style.transitionDelay=(i%4)*70+'ms';io.observe(el)});
- if(keep)scrollTo(0,y)}
+ if(keep)scrollTo(0,y);if(R.v==='home')demoStart()}
 function go(v,o){const sc=typeof o==='string'?o:'';Object.assign(R,{v,cat:'',sub:'',q:'',mode:'',max:0,br:[]});if(o&&!sc)Object.assign(R,o);$('.ov.on,.dr.on,.sr.on')&&closeAll();render();
  if(sc)setTimeout(()=>{const el=document.getElementById(sc);el&&el.scrollIntoView({behavior:'smooth'})},50);else scrollTo({top:0})}
 function toast(m){const t=$('#toast');t.textContent=m;t.classList.add('on');clearTimeout(t.h);t.h=setTimeout(()=>t.classList.remove('on'),2200)}
-function addc(id){C[id]=(C[id]||0)+1;const b=$('#cb');if(b){b.textContent='🛍 '+Object.values(C).reduce((a,c)=>a+c,0);b.classList.remove('bump');void b.offsetWidth;b.classList.add('bump')}toast('تمت الإضافة للسلة')}
+function addc(id){C[id]=(C[id]||0)+1;const b=$('#cb');if(b){$('#cn').textContent=Object.values(C).reduce((a,c)=>a+c,0);b.classList.remove('bump');void b.offsetWidth;b.classList.add('bump')}toast('تمت الإضافة للسلة')}
 function wish(id){W.has(id)?W.delete(id):W.add(id);render(1)}
-function ov(){let o=$('.ov');if(!o){document.body.insertAdjacentHTML('beforeend','<div class="ov gen" onclick="closeAll()"></div><aside class="dr gen" id="dr"></aside><div class="sr gen" id="sr"><input id="sq" placeholder="ابحث عن سناك..." onkeydown="if(event.key===\'Enter\'){go(\'all\',{q:this.value})}"></div>')}}
+function ov(){let o=$('.ov');if(!o){document.body.insertAdjacentHTML('beforeend',`<div class="ov gen" onclick="closeAll()"></div><aside class="dr gen" id="dr"></aside><aside class="dr gen" id="mn"></aside><div class="sr gen" id="sr"><div class="srh"><input id="sq" type="search" autocomplete="off" placeholder="ابحث عن منتج أو قسم..." oninput="sres(this.value)" onkeydown="if(event.key==='Enter')goS()"><button class="srx" aria-label="إغلاق" onclick="closeAll()">✕</button></div><div id="srr"></div></div>`)}}
 function closeAll(){document.querySelectorAll('.ov,.dr,.sr').forEach(e=>e.classList.remove('on'))}
-function srch(){ov();$('.ov').classList.add('on');$('#sr').classList.add('on');$('#sq').focus()}
+const nz=x=>String(x||'').toLowerCase().replace(/[\u064B-\u065F\u0670\u0640]/g,'').replace(/[أإآ]/g,'ا').replace(/ة/g,'ه').replace(/ى/g,'ي').trim();
+function sfind(q){const k=nz(q);if(!k)return[];const ws=k.split(/\s+/);return P().filter(o=>{const t=nz(o.p[0]+' '+(o.p[5]||'')+' '+(o.p[1]||'')+' '+T[o.k].n);return ws.every(w=>t.includes(w))})}
+function sres(q){const r=sfind(q),el=$('#srr');if(!q.trim()){el.innerHTML='<p class="sre">اكتب اسم المنتج أو القسم أو الماركة...</p>';return}
+ if(!r.length){el.innerHTML='<p class="sre">مفيش نتائج لـ «'+esc(q)+'»</p>';return}
+ el.innerHTML=r.slice(0,6).map(o=>{const p=nm(o.p);return `<div class="srrow"><span class="srm">${p.img?`<img src="${p.img}" alt="">`:p.e}</span><div><b>${esc(p.n)}</b><small>${esc(p.br)} · ${esc(T[o.k].n)}</small></div><span class="srp">${p.pr} ج.م</span><button class="add" aria-label="أضف للسلة" onclick="addc('${o.id}')">+</button></div>`}).join('')+`<button class="all srall" onclick="goS()">${r.length>6?'عرض كل النتائج ('+r.length+')':'عرض في صفحة المنتجات'}</button>`}
+function goS(){const q=$('#sq').value;if(q.trim())go('all',{q:q.trim()})}
+function srch(){ov();closeAll();$('.ov').classList.add('on');$('#sr').classList.add('on');const i=$('#sq');i.value='';sres('');setTimeout(()=>i.focus(),60)}
+function menuO(){ov();closeAll();const nl=(l,a)=>`<button class="mnl" onclick="${a}">${l}</button>`;
+ $('#mn').innerHTML=`<button aria-label="إغلاق" onclick="closeAll()" style="float:left;border:0;background:none;font-size:1.4rem">✕</button><h3>القائمة</h3>${nl('الرئيسية',"go('home')")}${nl('كل المنتجات',"go('all')")}${nl('وصل حديثًا',"go('all',{mode:'new'})")}${nl('المفضلة',"go('all',{mode:'wish'})")}<h4 style="margin:16px 0 4px;color:var(--wine2)">الأقسام</h4>${Object.entries(T).map(([k,t])=>nl(esc(t.e+' '+t.n),`go('all',{cat:'${k}'})`)).join('')}`;
+ $('.ov').classList.add('on');$('#mn').classList.add('on')}
+if(!window.__esc){window.__esc=1;document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeAll();bxClose&&bxClose()}})}
 function cartO(){ov();const ids=Object.keys(C).filter(k=>C[k]),all=P();let tot=0;
- $('#dr').innerHTML=`<button aria-label="إغلاق" onclick="closeAll()" style="float:left;border:0;background:none;font-size:1.4rem">✕</button><h3>سلتك</h3>${ids.length?ids.map(id=>{const o=all.find(x=>x.id===id);if(!o)return'';const p=nm(o.p);tot+=p.pr*C[id];return `<div class="it"><span class="e">${p.img?`<img src="${p.img}" alt="">`:p.e}</span><div><b>${esc(p.n)}</b><br>${p.pr} ج.م</div><span class="q"><button onclick="qty('${id}',1)">+</button> ${C[id]} <button onclick="qty('${id}',-1)">−</button></span></div>`}).join('')+`<p style="margin:16px 0"><b>الإجمالي: ${tot} ج.م</b></p><button class="b1" style="width:100%" onclick="toast('شكرًا! سيتم تفعيل الدفع قريبًا')">إتمام الطلب</button>`:'<p style="margin-top:20px;color:#888">السلة فاضية.</p>'}`;
+ $('#dr').innerHTML=`<button aria-label="إغلاق" onclick="closeAll()" style="float:left;border:0;background:none;font-size:1.4rem">✕</button><h3>سلتك</h3>${ids.length?ids.map(id=>{if(id.startsWith('box:')&&BXS[id]){const g={};let pr=0;BXS[id].items.forEach(i=>{const p=bxItem(i);if(p){g[p.n]=(g[p.n]||0)+1;pr+=p.pr}});tot+=pr*C[id];return `<div class="it"><span class="e"><i class="mbx"></i></span><div><b>📦 بوكس سناك (${BXS[id].items.length} منتج)</b><br><small>المحتويات: ${Object.entries(g).map(([n,c])=>esc(n)+(c>1?' ×'+c:'')).join('، ')}</small><br>${pr} ج.م</div><span class="q"><button onclick="qty('${id}',1)">+</button> ${C[id]} <button onclick="qty('${id}',-1)">−</button></span></div>`}const o=all.find(x=>x.id===id);if(!o)return'';const p=nm(o.p);tot+=p.pr*C[id];return `<div class="it"><span class="e">${p.img?`<img src="${p.img}" alt="">`:p.e}</span><div><b>${esc(p.n)}</b><br>${p.pr} ج.م</div><span class="q"><button onclick="qty('${id}',1)">+</button> ${C[id]} <button onclick="qty('${id}',-1)">−</button></span></div>`}).join('')+`<p style="margin:16px 0"><b>الإجمالي: ${tot} ج.م</b></p><button class="b1" style="width:100%" onclick="toast('شكرًا! سيتم تفعيل الدفع قريبًا')">إتمام الطلب</button>`:'<p style="margin-top:20px;color:#888">السلة فاضية.</p>'}`;
  $('.ov').classList.add('on');$('#dr').classList.add('on')}
 function qty(id,d){C[id]=Math.max(0,(C[id]||0)+d);cartO();render(1);$('.ov').classList.add('on');$('#dr').classList.add('on')}
 /* ===== owner-only admin ===== */
