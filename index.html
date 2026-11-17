@@ -275,6 +275,153 @@ input,select,textarea{color:var(--ink)}.sr input{color:var(--ink)}#ap input,#ap 
 @media(max-width:520px){.sh-track-box{padding:24px 16px;border-radius:18px}.sh-track-step{font-size:.68rem}.sh-track-step span{width:30px;height:30px}.sh-order-stats b{font-size:1.3rem}}
 
 </style>
+<style id="snack-mobile-polish">
+
+/* ===== Snack House: mobile-first polish ===== */
+@media (max-width: 860px) {
+  html, body { width:100%; max-width:100%; overflow-x:hidden; }
+  body { -webkit-text-size-adjust:100%; }
+  header {
+    position:sticky; top:0; min-height:76px;
+    display:flex; justify-content:center; align-items:center;
+    padding:8px 58px; gap:0;
+  }
+  header .logo {
+    order:0; margin:0 auto; display:flex; justify-content:center;
+    align-items:center; min-width:0; width:auto;
+  }
+  header .lgi {
+    width:62px; height:62px; max-width:62px;
+    box-shadow:0 0 0 3px #fff, 0 0 13px 5px #c2185b55, 0 0 25px 7px #e6a23c35;
+    filter:drop-shadow(0 0 7px #c2185b55);
+  }
+  header .ic { display:contents; }
+  header .mb {
+    display:grid; position:absolute; right:12px; top:50%;
+    transform:translateY(-50%); width:42px; height:42px;
+    border-radius:13px; background:#f7edf1; color:var(--wine);
+    font-size:1.45rem; z-index:2;
+  }
+  header .ib:not(.mb) { display:none; }
+  header .ic > .ib:nth-of-type(2) {
+    display:grid; position:absolute; left:60px; top:50%;
+    transform:translateY(-50%); width:38px; height:38px;
+    background:#f7edf1; color:var(--wine); z-index:2;
+  }
+  header .cartb {
+    position:absolute; left:12px; top:50%; transform:translateY(-50%);
+    height:40px; min-width:42px; padding:0 11px; gap:6px;
+    border-radius:14px; z-index:2;
+  }
+  header .cartb:hover { transform:translateY(-50%); }
+  header .cartb.bump { animation:none; }
+  header .cartb svg { width:19px; height:19px; }
+  header .logo:hover .lgi { transform:none; }
+
+  .wrap { padding-inline:12px; }
+  .hero { padding:30px 14px; gap:18px; }
+  .hero h1 { font-size:clamp(1.8rem,7vw,2.25rem); line-height:1.35; }
+  .hero p { font-size:.96rem; line-height:1.7; }
+  .sec { padding:30px 0 4px; }
+  .sh { align-items:center; gap:8px; margin-bottom:15px; }
+  .sh h2 { font-size:1.45rem; line-height:1.4; }
+  .sh p { font-size:.78rem; line-height:1.6; }
+  .all { padding:7px 12px; white-space:nowrap; font-size:.78rem; }
+
+  /* Product rows become swipeable horizontal rails instead of long vertical grids. */
+  .grid {
+    display:flex !important; flex-flow:row nowrap; align-items:stretch;
+    gap:12px; width:100%; max-width:100%;
+    overflow-x:auto; overflow-y:hidden;
+    padding:2px 1px 14px; scroll-snap-type:x mandatory;
+    scroll-padding-inline:12px; -webkit-overflow-scrolling:touch;
+    overscroll-behavior-inline:contain; scrollbar-width:thin;
+  }
+  .grid > .pc {
+    flex:0 0 clamp(190px,68vw,245px); width:clamp(190px,68vw,245px);
+    min-width:0; scroll-snap-align:start;
+    transform:none !important; transition:box-shadow .2s ease;
+    border-radius:18px; box-shadow:0 2px 10px #00000010;
+  }
+  .grid > .empty { flex:0 0 100%; }
+  .pc:hover { transform:none !important; box-shadow:0 2px 10px #00000010; }
+  .pc:hover .pi>span, .pc:hover .pi img { transform:none !important; }
+  .pc:hover .pt { color:var(--ink); }
+  .pi { aspect-ratio:1/1; }
+  .pi>span, .pi img { transition:none !important; }
+  .pa {
+    opacity:1 !important; transform:none !important;
+    top:9px; inset-inline-end:9px; display:flex;
+  }
+  .pa button {
+    width:38px; height:38px; font-size:1.05rem;
+    color:var(--wine); background:#fff;
+    box-shadow:0 3px 12px #0002;
+  }
+  .pa button.on { color:#fff; background:var(--wine); }
+  .pb { padding:11px 12px 13px; gap:5px; }
+  .pt { font-size:.94rem; line-height:1.45; }
+  .br { font-size:.58rem; }
+  .st { font-size:.68rem; }
+  .pr { padding-top:6px; }
+  .pr div { font-size:1rem; }
+  .add { width:38px; height:38px; flex:none; }
+  .pc, .cat, .add, .pk, .cin { -webkit-tap-highlight-color:transparent; }
+  .cat:hover, .cat:hover .c { transform:none !important; }
+  .cat { border-radius:18px; padding:13px 8px; }
+  .cat .c { width:84px; height:84px; }
+  .cats { display:flex; overflow-x:auto; gap:10px; padding:2px 1px 12px; scroll-snap-type:x mandatory; }
+  .cats > .cat { flex:0 0 112px; scroll-snap-align:start; }
+
+  /* Keep forms and checkout controls within the phone viewport. */
+  input, select, textarea, button { max-width:100%; }
+  input:not([type=checkbox]):not([type=radio]), select, textarea {
+    min-width:0; font-size:16px; max-width:100%;
+  }
+  .checkout-back { padding:10px; align-items:flex-end; }
+  .checkout-box {
+    width:100%; max-width:100%; max-height:92dvh;
+    padding:20px 15px calc(18px + env(safe-area-inset-bottom,0px));
+    border-radius:20px 20px 14px 14px; overflow-y:auto;
+  }
+  .checkout-box input, .checkout-box textarea, #checkoutModal input,
+  #checkoutModal textarea { width:100%; min-width:0; font-size:16px; }
+  .sr { padding:calc(14px + env(safe-area-inset-top,0px)) 14px 20px; }
+  .sr input { font-size:16px; min-width:0; }
+  .srh { gap:8px; }
+  .srx { width:40px; height:40px; }
+  .dr { width:min(88vw,380px); max-width:100%; padding:16px; }
+  .dr input, .dr select, .dr textarea { width:100%; min-width:0; font-size:16px; }
+  .promo { padding:26px 18px; border-radius:22px; }
+  .feat { gap:12px; }
+  .fb { min-height:230px; padding:22px; border-radius:22px; }
+  .news { gap:14px; }
+  .news form { width:100%; display:flex; gap:8px; }
+  .news input { flex:1; min-width:0; width:0; }
+  .bd { padding:12px; }
+  .bdh h2 { font-size:1.45rem; }
+  .bdp .pks { grid-template-columns:repeat(3,minmax(0,1fr)); }
+  .sh-track-box { width:100%; max-width:100%; }
+}
+@media (max-width: 390px) {
+  header { min-height:70px; padding-inline:54px; }
+  header .lgi { width:56px; height:56px; }
+  header .mb { right:8px; width:39px; height:39px; }
+  header .cartb { left:8px; height:38px; min-width:39px; padding-inline:9px; }
+  .wrap { padding-inline:10px; }
+  .grid > .pc { flex-basis:74vw; width:74vw; }
+  .sh h2 { font-size:1.3rem; }
+  .sh p { font-size:.74rem; }
+}
+@media (hover:none) and (pointer:coarse) {
+  .pc:hover, .cat:hover, .cat:hover .c, .pc:hover .pi>span,
+  .pc:hover .pi img, .add:hover, .logo:hover .lgi {
+    transform:none !important;
+  }
+  .pa { opacity:1 !important; transform:none !important; }
+}
+
+</style>
 </head>
 <body data-t="home">
 <div id="app"></div>
@@ -324,7 +471,7 @@ function bxLock(){if(!BX.length)return;const w=$('#bdw');if(w)w.classList.add('c
 const BXS={};
 function bxCart(){const bid='box:'+Date.now().toString(36);BXS[bid]={items:[...BX]};C[bid]=1;const b=$('#cb');if(b){$('#cn').textContent=Object.values(C).reduce((a,c)=>a+c,0);b.classList.remove('bump');void b.offsetWidth;b.classList.add('bump')}bxClose();BX=[];CLOSED=false;LASTI=-1;toast('تمت إضافة الصندوق للسلة');cartO()}
 function card(o){const p=nm(o.p),d=p.old>p.pr?Math.round((1-p.pr/p.old)*100):0,g=T[o.k].g;
- return `<div class="pc rv"><div class="pi" style="background:linear-gradient(135deg,${g})">${p.img?`<img${p.img.startsWith('data:image/webp')?' class="tr"':''} src="${p.img}" alt="">`:`<span>${p.e}</span>`}${d?`<b class="pd">-${d}%</b>`:''}${p.nw?'<b class="pn">وصل حديثًا</b>':''}<div class="pa"><button class="${W.has(o.id)?'on':''}" aria-label="مفضلة" onclick="wish('${o.id}')">♥</button><button aria-label="عرض سريع" onclick="toast('${esc(p.n)} — ${p.pr} ج.م')">👁</button></div></div>
+ return `<div class="pc rv"><div class="pi" style="background:linear-gradient(135deg,${g})">${p.img?`<img${p.img.startsWith('data:image/webp')?' class="tr"':''} src="${p.img}" alt="">`:`<span>${p.e}</span>`}${d?`<b class="pd">-${d}%</b>`:''}${p.nw?'<b class="pn">وصل حديثًا</b>':''}<div class="pa"><button class="${W.has(o.id)?'on':''}" aria-label="إضافة للمفضلة" title="المفضلة" onclick="wish('${o.id}')">♥</button></div></div>
  <div class="pb"><span class="br">${esc(p.br)}</span><span class="pt">${esc(p.n)}</span><span class="st"><u>${'★'.repeat(Math.round(p.r))}</u> ${p.r} (${p.rv})</span><div class="pr"><button class="add" aria-label="أضف للسلة" onclick="addc('${o.id}')">+</button><div>${p.old>p.pr?`<s>${p.old} ج.م</s>`:''}${p.pr} ج.م</div></div></div></div>`}
 function hdr(){const n=Object.values(C).reduce((a,b)=>a+b,0),ann=S.ann.split('|').map(x=>`<span class="i">${esc(x)}</span>`).join('');
  const nv=(l,a,on)=>`<button class="${on?'on':''}" onclick="${a}">${l}</button>`;
@@ -484,7 +631,7 @@ function adminOrders(){
   <div><b>${ORDER_COUNTS.out}</b><span>خرج للتوصيل</span></div>
   <div class="delivered"><b>${ORDER_COUNTS.delivered}</b><span>تم تسليمها</span></div>
  </div>`;
- ap.innerHTML=`<button class="btn" onclick="adminPanel()">← رجوع للمنتجات</button><button class="btn" onclick="adminLogout()" style="float:left">خروج</button><h3>طلبات العملاء</h3>${stats}<button class="btn" onclick="loadOrders().then(adminOrders)">تحديث الطلبات والإحصائيات</button>${ORDERS.length?ORDERS.map(o=>`<article class="order-card"><div class="order-head"><b>طلب #${o.order_number}</b><span>${new Date(o.created_at).toLocaleString('ar-EG')}</span></div><p><b>${esc(o.customer_name)}</b> · ${esc(o.phone)}</p><p>${esc(o.address)}</p>${o.notes?`<p>ملاحظات: ${esc(o.notes)}</p>`:''}<ul>${(o.order_items||[]).map(x=>`<li>${esc(x.product_name)} × ${x.quantity} — ${x.line_total} ج.م</li>`).join('')}</ul><p><b>الإجمالي: ${o.total} ج.م</b></p><label>حالة الطلب<select onchange="orderStatus('${o.id}',this.value)">${Object.entries(DB_STATUS).map(([v,l])=>`<option value="${v}"${v===o.status?' selected':''}>${l}</option>`).join('')}</select></label></article>`).join(''):'<p>لسه مفيش طلبات.</p>'}`;
+ ap.innerHTML=`<button class="btn" onclick="adminPanel()">← رجوع للمنتجات</button><button class="btn" onclick="adminLogout()" style="float:left">خروج</button><h3>طلبات العملاء</h3>${stats}<button class="btn" onclick="loadOrders().then(adminOrders)">تحديث الطلبات والإحصائيات</button>${ORDERS.length?ORDERS.map(o=>`<article class="order-card"><div class="order-head"><b>طلب #${o.order_number}</b><span>${new Date(o.created_at).toLocaleString('ar-EG')}</span></div><p><b>${esc(o.customer_name)}</b> · ${esc(o.phone)}</p><p>${esc(o.address)}</p>${o.notes?`<p>ملاحظات: ${esc(o.notes)}</p>`:''}<ul>${(o.order_items||[]).map(x=>`<li>${esc(x.product_name)} × ${x.quantity} — ${x.line_total} ج.م</li>`).join('')}</ul><p><b>الإجمالي: ${o.total} ج.م</b></p><label>حالة الطلب<select onchange="orderStatus('${o.id}',this.value)">${[['pending','جديد'],['preparing','قيد التنفيذ'],['out_for_delivery','خرج للتوصيل'],['delivered','تم التسليم'],['cancelled','ملغي']].map(([v,l])=>`<option value="${v}"${(v===o.status||(v==='preparing'&&o.status==='confirmed'))?' selected':''}>${l}</option>`).join('')}</select></label></article>`).join(''):'<p>لسه مفيش طلبات.</p>'}`;
 }
 async function adminPanel(){adminShell();const ap=$('#ap');ap.classList.add('on');const f=(l,k,v)=>`<label>${l}<input data-s="${k}" value="${esc(v)}" oninput="ed(this)"></label>`;const t=T[AC];
  ap.innerHTML=`<button class="btn" onclick="adminClose()" style="float:left">✕</button><button class="btn" onclick="adminLogout()">تسجيل الخروج</button><h3>لوحة تحكم Snack House</h3><button class="btn" style="background:#16834a" onclick="adminSave()">💾 حفظ التعديلات في قاعدة البيانات</button><button class="btn" onclick="loadOrders().then(adminOrders)">📦 إدارة الطلبات</button><p class="admin-msg">أي تعديل في المنتجات لازم تضغطي بعده حفظ التعديلات.</p><h4>إضافة قسم</h4><div class="row"><input id="nn" placeholder="اسم القسم"><input id="ne" placeholder="إيموجي 🍬"><button class="btn" onclick="addcat()">إضافة</button></div><h4>الأقسام والمنتجات</h4><select onchange="AC=this.value;adminPanel()">${Object.entries(T).map(([k,v])=>`<option value="${k}"${k===AC?' selected':''}>${esc(v.n)}</option>`).join('')}</select>${t?`<label>اسم القسم<input data-k="${AC}" data-f="n" value="${esc(t.n)}" oninput="ed(this)"></label><label>الإيموجي<input data-k="${AC}" data-f="e" value="${esc(t.e)}" oninput="ed(this)"></label><label>صورة القسم<input type="file" accept="image/*" data-c="${AC}" onchange="up(this)"></label><button class="btn danger" onclick="delcat('${AC}')">حذف القسم</button>${t.p_.map((p,i)=>`<div class="admin-product"><b>منتج ${i+1}</b>${[['الاسم',0],['الوصف القصير',1],['السعر',2],['الإيموجي',3],['الماركة',5],['السعر قبل الخصم',6]].map(([l,j])=>`<label>${l}<input data-k="${AC}" data-i="${i}" data-j="${j}" value="${esc(p[j])}"${j===2||j===6?' type="number" min="0"':''} oninput="ed(this)"></label>`).join('')}<label><input type="checkbox" data-k="${AC}" data-i="${i}" data-j="9" ${p[9]==='new'?'checked':''} onchange="ed(this)"> وصل حديثًا</label><label>صورة المنتج<input type="file" accept="image/*" data-k="${AC}" data-i="${i}" onchange="up(this)"></label><button class="btn danger" onclick="delp(${i})">حذف المنتج</button></div>`).join('')}<button class="btn" onclick="addp()">+ إضافة منتج</button>`:''}`;
