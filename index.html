@@ -422,6 +422,153 @@ input,select,textarea{color:var(--ink)}.sr input{color:var(--ink)}#ap input,#ap 
 }
 
 </style>
+<style id="snack-mobile-final-refinements">
+
+/* ===== Final mobile refinements: centered logo + category product grid ===== */
+@media (max-width: 860px) {
+  header {
+    min-height: 108px !important;
+    height: 108px;
+    padding: 8px 14px !important;
+  }
+  header .logo {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    margin: 0 !important;
+    width: auto;
+    z-index: 1;
+  }
+  header .lgi {
+    width: 86px !important;
+    height: 86px !important;
+    max-width: 86px;
+    border-radius: 16px;
+    object-fit: contain;
+    box-shadow: 0 0 0 2px #fff, 0 0 15px 6px #c2185b66,
+                0 0 30px 9px #e6a23c44 !important;
+    filter: drop-shadow(0 0 8px #c2185b66) !important;
+  }
+  header .mb {
+    right: 13px !important;
+    width: 43px !important;
+    height: 43px !important;
+  }
+  /* Search and cart stay on the left with a clear, comfortable gap. */
+  header .ic > .ib:nth-of-type(2) {
+    left: 75px !important;
+    width: 42px !important;
+    height: 42px !important;
+  }
+  header .cartb {
+    left: 13px !important;
+    min-width: 44px !important;
+    height: 42px !important;
+    padding: 0 11px !important;
+  }
+
+  /* On a category/products page, match the compact two-column store layout. */
+  .lay {
+    display: block !important;
+    width: 100%;
+  }
+  .lay > .side { display: none !important; }
+  .lay > .grid {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    grid-auto-flow: row;
+    gap: 12px !important;
+    width: 100%;
+    max-width: 100%;
+    overflow: visible !important;
+    padding: 2px 0 18px !important;
+    scroll-snap-type: none !important;
+  }
+  .lay > .grid > .pc {
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100%;
+    flex: initial !important;
+    scroll-snap-align: none !important;
+    border-radius: 19px;
+    transform: none !important;
+    box-shadow: 0 3px 12px #00000012;
+  }
+  .lay > .grid > .empty {
+    grid-column: 1 / -1;
+    width: 100%;
+  }
+  .lay > .grid .pi {
+    aspect-ratio: 1 / 1.02;
+    min-height: 0;
+    font-size: 3.2rem;
+  }
+  .lay > .grid .pi img {
+    padding: 7%;
+    object-fit: contain;
+  }
+  .lay > .grid .pb {
+    padding: 11px 10px 12px;
+    gap: 6px;
+  }
+  .lay > .grid .pt {
+    font-size: clamp(.82rem, 3.5vw, .98rem);
+    line-height: 1.4;
+    overflow-wrap: anywhere;
+  }
+  .lay > .grid .br { font-size: .53rem; }
+  .lay > .grid .st { font-size: .62rem; }
+  .lay > .grid .pr {
+    gap: 6px;
+    align-items: center;
+    padding-top: 7px;
+  }
+  .lay > .grid .pr div {
+    font-size: clamp(.88rem, 3.8vw, 1.05rem);
+    white-space: normal;
+  }
+  .lay > .grid .pr s { font-size: .68rem; }
+  .lay > .grid .add {
+    width: 36px;
+    height: 36px;
+    min-width: 36px;
+    font-size: 1.1rem;
+  }
+  .lay > .grid .pa {
+    opacity: 1 !important;
+    transform: none !important;
+    top: 8px;
+    inset-inline-end: 8px;
+  }
+  .lay > .grid .pa button {
+    width: 34px;
+    height: 34px;
+  }
+  .ph1 {
+    padding: 28px 0 14px;
+  }
+  .ph1 h1 { font-size: clamp(1.8rem, 7vw, 2.5rem); }
+  .bar { margin: 8px 0 14px; }
+}
+@media (max-width: 390px) {
+  header { min-height: 100px !important; height: 100px; }
+  header .lgi { width: 78px !important; height: 78px !important; }
+  header .ic > .ib:nth-of-type(2) { left: 69px !important; }
+  .lay > .grid { gap: 9px !important; }
+  .lay > .grid .pb { padding: 9px 8px 10px; }
+  .lay > .grid .pt { font-size: .82rem; }
+}
+@media (hover: none) and (pointer: coarse) {
+  .pc, .pc:hover, .pc:active,
+  .pc:hover .pi img, .pc:hover .pi > span,
+  .cat, .cat:hover, .cat:hover .c {
+    transform: none !important;
+    transition: none !important;
+  }
+}
+
+</style>
 </head>
 <body data-t="home">
 <div id="app"></div>
