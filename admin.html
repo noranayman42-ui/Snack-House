@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>لوحة إدارة Snack House</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Readex+Pro:wght@300;400;600&family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+:root{--bg:#faf7f2;--ink:#1c0f17;--wine:#6b0f3a;--wine2:#8a1c4d;--amber:#e6a23c;--pink:#f5e0e7;--mut:#7a6f74;--line:#eadfe4;--ok:#21834a;--danger:#a21d2b}
+*{box-sizing:border-box;margin:0}
+body{font-family:Tajawal,system-ui,sans-serif;background:var(--bg);color:var(--ink);min-height:100dvh}
+button{font:inherit;cursor:pointer}
+input,select,textarea{font:inherit;color:var(--ink)}
+:focus-visible{outline:3px solid var(--amber);outline-offset:2px}
+h1,h2,h3{font-family:'Readex Pro',Tajawal,sans-serif}
+.wrap{max-width:1180px;margin:0 auto;padding:0 clamp(14px,3.5vw,32px) 60px}
+/* header */
+header{position:sticky;top:0;z-index:20;background:#fffdfb;box-shadow:0 1px 0 var(--line)}
+.hbar{max-width:1180px;margin:0 auto;padding:12px clamp(14px,3.5vw,32px);display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.logo{display:flex;align-items:center;gap:10px}
+.logo .lg{width:44px;height:44px;border-radius:12px;background:linear-gradient(135deg,#f6a02e,#c2185b);display:grid;place-items:center;font-size:1.4rem}
+.logo b{display:block;font:700 1.02rem 'Readex Pro',sans-serif}
+.logo small{font-size:.68rem;color:var(--mut)}
+.hsp{flex:1}
+.btn{border:0;border-radius:99px;padding:10px 20px;font-weight:800;background:var(--wine);color:#fff;transition:transform .15s,background .15s}
+.btn:hover{transform:translateY(-1px);background:var(--wine2)}
+.btn.ghost{background:none;color:var(--wine);border:1px solid var(--line)}
+.btn.ghost:hover{background:var(--pink)}
+.btn.dark{background:var(--ink)}
+.btn.danger{background:var(--danger)}
+.btn.small{padding:7px 14px;font-size:.85rem}
+.btn:disabled{opacity:.5;cursor:default;transform:none}
+/* login */
+.login{max-width:430px;margin:8vh auto 0;background:#fff;border:1px solid var(--line);border-radius:26px;padding:34px 28px;box-shadow:0 18px 44px #6b0f3a14}
+.login h1{font-size:1.7rem;font-weight:600;color:var(--wine);margin-bottom:6px}
+.login p{color:var(--mut);font-size:.92rem;line-height:1.7;margin-bottom:10px}
+label{display:block;font-size:.86rem;font-weight:700;margin:14px 0 0}
+label input,label select,label textarea{display:block;width:100%;margin-top:6px;padding:12px 14px;border:1px solid var(--line);border-radius:12px;background:#fff;font-weight:400}
+label textarea{min-height:74px;resize:vertical}
+.msg{font-size:.86rem;color:var(--danger);line-height:1.6;margin-top:12px;min-height:1.2em}
+.login .btn{width:100%;margin-top:20px;padding:13px}
+/* stats */
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin:26px 0 6px}
+.stat{background:#fff;border:1px solid var(--line);border-radius:18px;padding:16px;text-align:center}
+.stat b{display:block;font-size:1.65rem;color:var(--wine);font-family:'Readex Pro',sans-serif}
+.stat span{font-size:.82rem;color:var(--mut)}
+.stat.green b{color:var(--ok)}
+.stat.amber b{color:#b97a14}
+/* tabs */
+.tabs{display:flex;gap:8px;margin:22px 0 18px;flex-wrap:wrap}
+.tabs button{border:1px solid var(--line);background:#fff;border-radius:99px;padding:10px 22px;font-weight:800}
+.tabs button.on{background:var(--wine);color:#fff;border-color:var(--wine)}
+.tabs button .n{background:var(--amber);color:#2a1a05;border-radius:99px;padding:0 8px;font-size:.75rem;margin-inline-start:6px}
+.tabs button.on .n{background:#fff;color:var(--wine)}
+/* toolbar */
+.toolbar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:16px}
+.toolbar input[type=search]{flex:1;min-width:210px;padding:11px 16px;border:1px solid var(--line);border-radius:99px;background:#fff}
+.chips{display:flex;gap:7px;flex-wrap:wrap}
+.chips button{border:1px solid var(--line);background:#fff;border-radius:99px;padding:7px 15px;font-size:.83rem;font-weight:700}
+.chips button.on{background:var(--pink);border-color:var(--wine2);color:var(--wine)}
+/* orders */
+.order{background:#fff;border:1px solid var(--line);border-radius:20px;padding:18px;margin-bottom:14px;box-shadow:0 2px 10px #00000008}
+.order.new{border-color:var(--amber);box-shadow:0 0 0 2px #e6a23c33}
+.ohead{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;align-items:center}
+.ohead b{font-size:1.05rem;color:var(--wine)}
+.ohead time{color:var(--mut);font-size:.8rem}
+.badge{border-radius:99px;padding:3px 12px;font-size:.74rem;font-weight:800}
+.badge.pending{background:#fdf0d5;color:#8a5c00}
+.badge.preparing,.badge.confirmed{background:#e3ecfd;color:#274b9f}
+.badge.out_for_delivery{background:#fde8d7;color:#9a4d00}
+.badge.delivered{background:#e2f4e7;color:var(--ok)}
+.badge.cancelled{background:#fbe3e6;color:var(--danger)}
+.order p{margin:7px 0;line-height:1.65;font-size:.93rem}
+.order p small{color:var(--mut)}
+.order ul{padding-inline-start:20px;line-height:1.8;font-size:.92rem;margin:6px 0}
+.ofoot{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:center;margin-top:12px;border-top:1px solid var(--line);padding-top:12px}
+.ofoot .total{font-weight:900;font-size:1.08rem}
+.ofoot select{padding:9px 12px;border:1px solid var(--line);border-radius:10px;background:#fff;font-weight:700}
+.contact{display:flex;gap:8px}
+.contact a{border-radius:99px;padding:7px 14px;font-size:.83rem;font-weight:800;text-decoration:none}
+.contact a.call{background:var(--pink);color:var(--wine)}
+.contact a.wa{background:#e2f4e7;color:var(--ok)}
+/* products */
+.pgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(215px,1fr));gap:16px}
+.pc{background:#fff;border:1px solid var(--line);border-radius:20px;overflow:hidden;display:flex;flex-direction:column}
+.pc.off{opacity:.62}
+.pi{aspect-ratio:1/.82;background:#f7f2ee;display:grid;place-items:center;font-size:3.4rem;overflow:hidden}
+.pi img{width:100%;height:100%;object-fit:contain;padding:6%}
+.pb{padding:13px 15px 15px;display:flex;flex-direction:column;gap:5px;flex:1}
+.pb .cat{font-size:.68rem;font-weight:700;color:var(--wine2);letter-spacing:.04em}
+.pb .nm{font-weight:800;line-height:1.45}
+.pb .pr{font-weight:900}
+.pb .pr s{color:var(--mut);font-weight:400;font-size:.8rem}
+.pa{display:flex;gap:8px;margin-top:auto;padding-top:10px}
+.pa .btn{flex:1}
+/* form */
+.formcard{background:#fff;border:1px solid var(--line);border-radius:22px;padding:24px;max-width:760px}
+.formcard h2{color:var(--wine);font-size:1.45rem;margin-bottom:4px}
+.formcard>p{color:var(--mut);font-size:.9rem}
+.frow{display:grid;grid-template-columns:1fr 1fr;gap:0 16px}
+.check{display:flex;align-items:center;gap:8px;font-weight:700}
+.check input{width:auto;margin:0}
+.imgprev{margin-top:8px;width:110px;height:110px;border-radius:14px;background:#f7f2ee;display:none;place-items:center;overflow:hidden}
+.imgprev img{width:100%;height:100%;object-fit:contain}
+.formactions{display:flex;gap:10px;margin-top:22px;flex-wrap:wrap}
+.empty{text-align:center;color:var(--mut);padding:56px 16px;background:#fff;border:1px dashed var(--line);border-radius:20px;line-height:1.8}
+#toast{position:fixed;bottom:22px;inset-inline:0;margin:auto;width:max-content;max-width:92%;background:var(--ink);color:#fff;border-radius:99px;padding:12px 24px;z-index:90;opacity:0;transform:translateY(16px);transition:.3s;pointer-events:none;text-align:center}
+#toast.on{opacity:1;transform:none}
+.hidden{display:none!important}
+@media(max-width:640px){.frow{grid-template-columns:1fr}.hbar{gap:8px}.btn{padding:9px 15px}}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="hbar">
+    <div class="logo"><span class="lg">🍬</span><span><b>Snack House</b><small>لوحة الإدارة</small></span></div>
+    <div class="hsp"></div>
+    <a class="btn ghost small" href="index.html" style="text-decoration:none">عرض المتجر ←</a>
+    <button class="btn ghost small hidden" id="refreshBtn" onclick="refreshAll()">↻ تحديث</button>
+    <button class="btn dark small hidden" id="logoutBtn" onclick="logout()">تسجيل الخروج</button>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <!-- ===== Login ===== -->
+  <section id="loginView" class="login hidden">
+    <h1>دخول الإدارة</h1>
+    <p>سجّلي الدخول بنفس حساب المدير اللي بتستخدميه في المتجر. الصفحة دي منفصلة عن المتجر، لكنها مربوطة بنفس قاعدة البيانات.</p>
+    <form onsubmit="login(event)">
+      <label>البريد الإلكتروني<input id="loginEmail" type="email" autocomplete="username" required dir="ltr"></label>
+      <label>كلمة المرور<input id="loginPass" type="password" autocomplete="current-password" required dir="ltr"></label>
+      <button class="btn" type="submit" id="loginBtn">تسجيل الدخول</button>
+      <p class="msg" id="loginMsg"></p>
+    </form>
+  </section>
+
+  <!-- ===== Dashboard ===== -->
+  <main id="dashView" class="hidden">
+    <div class="stats">
+      <div class="stat"><b id="stNew">0</b><span>طلبات جديدة</span></div>
+      <div class="stat"><b id="stPrep">0</b><span>قيد التنفيذ</span></div>
+      <div class="stat"><b id="stOut">0</b><span>خرج للتوصيل</span></div>
+      <div class="stat green"><b id="stDelivered">0</b><span>تم تسليمها</span></div>
+      <div class="stat amber"><b id="stRevenue">0</b><span>إيرادات الطلبات (ج.م)</span></div>
+      <div class="stat"><b id="stProducts">0</b><span>منتج في المتجر</span></div>
+    </div>
+
+    <div class="tabs">
+      <button id="tabOrdersBtn" class="on" onclick="showTab('orders')">📦 طلبات العملاء <span class="n" id="newCount">0</span></button>
+      <button id="tabProductsBtn" onclick="showTab('products')">🍬 المنتجات</button>
+      <button id="tabFormBtn" onclick="openForm()">＋ إضافة منتج</button>
+    </div>
+
+    <!-- Orders tab -->
+    <section id="tabOrders">
+      <div class="toolbar">
+        <input type="search" id="orderSearch" placeholder="ابحثي برقم الطلب، اسم العميل، أو رقم الموبايل…" oninput="renderOrders()">
+        <div class="chips" id="statusChips">
+          <button class="on" data-s="" onclick="setStatusFilter(this)">الكل</button>
+          <button data-s="pending" onclick="setStatusFilter(this)">جديد</button>
+          <button data-s="preparing" onclick="setStatusFilter(this)">قيد التنفيذ</button>
+          <button data-s="out_for_delivery" onclick="setStatusFilter(this)">خرج للتوصيل</button>
+          <button data-s="delivered" onclick="setStatusFilter(this)">تم التسليم</button>
+          <button data-s="cancelled" onclick="setStatusFilter(this)">ملغي</button>
+        </div>
+      </div>
+      <p style="color:var(--mut);font-size:.82rem;margin-bottom:14px">الطلبات بتتحدّث تلقائيًا كل دقيقة، وأي طلب جديد من المتجر هيظهر هنا على طول.</p>
+      <div id="ordersList"></div>
+    </section>
+
+    <!-- Products tab -->
+    <section id="tabProducts" class="hidden">
+      <div class="toolbar">
+        <input type="search" id="prodSearch" placeholder="ابحثي باسم المنتج…" oninput="renderProducts()">
+        <button class="btn" onclick="openForm()">＋ إضافة منتج جديد</button>
+      </div>
+      <div class="pgrid" id="productsGrid"></div>
+    </section>
+
+    <!-- Product form tab -->
+    <section id="tabForm" class="hidden">
+      <div class="formcard">
+        <h2 id="formTitle">إضافة منتج جديد</h2>
+        <p>المنتج هيظهر في المتجر فور حفظه.</p>
+        <form onsubmit="saveProduct(event)">
+          <input type="hidden" id="fId">
+          <label>القسم
+            <select id="fCat" onchange="toggleNewCat()"></select>
+          </label>
+          <div id="newCatBox" class="hidden">
+            <label>اسم القسم الجديد<input id="fNewCat" placeholder="مثال: مشروبات"></label>
+            <label>إيموجي القسم<input id="fNewCatEmoji" placeholder="🥤" maxlength="4"></label>
+          </div>
+          <label>اسم المنتج *<input id="fName" required placeholder="مثال: شوكولاتة دبي"></label>
+          <label>وصف قصير<input id="fSub" placeholder="مثال: بالكنافة والفستق — 200 جم"></label>
+          <div class="frow">
+            <label>السعر (ج.م) *<input id="fPrice" type="number" min="0" step="0.01" required></label>
+            <label>السعر قبل الخصم (اختياري)<input id="fOld" type="number" min="0" step="0.01"></label>
+          </div>
+          <div class="frow">
+            <label>الماركة<input id="fBrand" value="Snack House"></label>
+            <label>إيموجي المنتج (لو مفيش صورة)<input id="fEmoji" placeholder="🍫" maxlength="4"></label>
+          </div>
+          <div class="frow">
+            <label>التقييم<input id="fRating" type="number" min="0" max="5" step="0.1" value="4.5"></label>
+            <label>عدد التقييمات<input id="fReviews" type="number" min="0" step="1" value="0"></label>
+          </div>
+          <label>صورة المنتج<input id="fImage" type="file" accept="image/*" onchange="previewImage()"></label>
+          <div class="imgprev" id="imgPrev"><img id="imgPrevEl" alt="معاينة صورة المنتج"></div>
+          <div class="frow" style="margin-top:16px">
+            <label class="check"><input id="fNew" type="checkbox"> وصل حديثًا</label>
+            <label class="check"><input id="fActive" type="checkbox" checked> ظاهر في المتجر</label>
+          </div>
+          <div class="formactions">
+            <button class="btn" type="submit" id="saveBtn">حفظ المنتج</button>
+            <button class="btn ghost" type="button" onclick="showTab('products')">إلغاء</button>
+          </div>
+          <p class="msg" id="formMsg"></p>
+        </form>
+      </div>
+    </section>
+  </main>
+</div>
+
+<div id="toast"></div>
+
+<script>
+const SB_URL = 'https://jsfyvxtmgizgpnqabvbz.supabase.co';
+const SB_KEY = 'sb_publishable_r_EDSgJ_PfQbKHFRcwkOsw_r3MxEl2t';
+const sb = window.supabase.createClient(SB_URL, SB_KEY);
+
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const money = n => (Number(n) || 0).toLocaleString('ar-EG');
+
+let adminUser = null, CATS = [], PRODS = [], ORDERS = [];
+let statusFilter = '', currentTab = 'orders', autoTimer = null;
+
+const STATUS = {
+  pending: 'جديد', confirmed: 'قيد التنفيذ', preparing: 'قيد التنفيذ',
+  out_for_delivery: 'خرج للتوصيل', delivered: 'تم التسليم', cancelled: 'ملغي'
+};
+
+function toast(t) {
+  const el = $('#toast'); el.textContent = t; el.classList.add('on');
+  clearTimeout(el._t); el._t = setTimeout(() => el.classList.remove('on'), 2600);
+}
+
+/* ---------- Auth ---------- */
+async function checkAdmin(user) {
+  const { data, error } = await sb.from('profiles').select('is_admin').eq('id', user.id).maybeSingle();
+  if (error) throw error;
+  return !!(data && data.is_admin);
+}
+
+async function login(e) {
+  e.preventDefault();
+  const msg = $('#loginMsg'), btn = $('#loginBtn');
+  btn.disabled = true; msg.textContent = 'جارٍ التحقق…'; msg.style.color = 'var(--mut)';
+  try {
+    const { data, error } = await sb.auth.signInWithPassword({
+      email: $('#loginEmail').value.trim(), password: $('#loginPass').value
+    });
+    if (error) throw error;
+    if (!await checkAdmin(data.user)) {
+      await sb.auth.signOut();
+      throw new Error('الحساب ده مش مضاف كمدير في جدول profiles');
+    }
+    adminUser = data.user; enterDash();
+  } catch (err) {
+    msg.style.color = 'var(--danger)';
+    msg.textContent = err.message || 'فشل تسجيل الدخول';
+  } finally { btn.disabled = false; }
+}
+
+async function logout() {
+  await sb.auth.signOut(); adminUser = null;
+  clearInterval(autoTimer);
+  $('#dashView').classList.add('hidden');
+  $('#logoutBtn').classList.add('hidden'); $('#refreshBtn').classList.add('hidden');
+  $('#loginView').classList.remove('hidden');
+  toast('تم تسجيل الخروج');
+}
+
+async function enterDash() {
+  $('#loginView').classList.add('hidden');
+  $('#dashView').classList.remove('hidden');
+  $('#logoutBtn').classList.remove('hidden'); $('#refreshBtn').classList.remove('hidden');
+  await refreshAll();
+  clearInterval(autoTimer);
+  autoTimer = setInterval(() => { if (currentTab === 'orders') loadOrders().then(renderAll).catch(() => {}); }, 60000);
+}
+
+async function init() {
+  const { data: { session } } = await sb.auth.getSession();
+  if (session && await checkAdmin(session.user).catch(() => false)) {
+    adminUser = session.user; enterDash();
+  } else {
+    $('#loginView').classList.remove('hidden');
+  }
+}
+
+/* ---------- Data ---------- */
+async function loadCatalog() {
+  const [cats, prods] = await Promise.all([
+    sb.from('categories').select('*').order('sort_order'),
+    sb.from('products').select('*').order('sort_order')
+  ]);
+  if (cats.error) throw cats.error;
+  if (prods.error) throw prods.error;
+  CATS = cats.data || []; PRODS = prods.data || [];
+}
+
+async function loadOrders() {
+  const { data, error } = await sb.from('orders')
+    .select('*, order_items(*)').order('created_at', { ascending: false }).limit(100);
+  if (error) throw error;
+  ORDERS = data || [];
+}
+
+async function refreshAll() {
+  try { await Promise.all([loadCatalog(), loadOrders()]); renderAll(); }
+  catch (e) { toast('تعذّر التحديث: ' + (e.message || e)); }
+}
+
+function renderAll() { renderStats(); renderOrders(); renderProducts(); fillCatSelect(); }
+
+function renderStats() {
+  const count = s => ORDERS.filter(o => o.status === s).length;
+  const prep = count('preparing') + count('confirmed');
+  $('#stNew').textContent = count('pending');
+  $('#stPrep').textContent = prep;
+  $('#stOut').textContent = count('out_for_delivery');
+  $('#stDelivered').textContent = count('delivered');
+  $('#stRevenue').textContent = money(ORDERS.filter(o => o.status !== 'cancelled').reduce((s, o) => s + (Number(o.total) || 0), 0));
+  $('#stProducts').textContent = PRODS.filter(p => p.is_active !== false).length;
+  $('#newCount').textContent = count('pending');
+}
+
+/* ---------- Tabs ---------- */
+function showTab(t) {
+  currentTab = t;
+  ['orders', 'products', 'form'].forEach(x => $('#tab' + x[0].toUpperCase() + x.slice(1)).classList.toggle('hidden', x !== t));
+  $('#tabOrdersBtn').classList.toggle('on', t === 'orders');
+  $('#tabProductsBtn').classList.toggle('on', t === 'products');
+  $('#tabFormBtn').classList.toggle('on', t === 'form');
+}
+
+/* ---------- Orders ---------- */
+function setStatusFilter(btn) {
+  statusFilter = btn.dataset.s;
+  document.querySelectorAll('#statusChips button').forEach(b => b.classList.toggle('on', b === btn));
+  renderOrders();
+}
+
+function waLink(phone) {
+  let d = String(phone || '').replace(/\D/g, '');
+  if (d.startsWith('01')) d = '2' + d;
+  if (d.startsWith('20')) return 'https://wa.me/' + d;
+  return 'https://wa.me/2' + d;
+}
+
+function renderOrders() {
+  const q = ($('#orderSearch').value || '').trim();
+  const list = ORDERS.filter(o => {
+    if (statusFilter) {
+      if (statusFilter === 'preparing') { if (!['preparing', 'confirmed'].includes(o.status)) return false; }
+      else if (o.status !== statusFilter) return false;
+    }
+    if (q) {
+      const hay = [o.order_number, o.customer_name, o.phone].join(' ');
+      if (!hay.includes(q)) return false;
+    }
+    return true;
+  });
+  const box = $('#ordersList');
+  if (!list.length) {
+    box.innerHTML = '<div class="empty">لسه مفيش طلبات مطابقة.<br>أي طلب جديد من المتجر هيظهر هنا فورًا.</div>';
+    return;
+  }
+  box.innerHTML = list.map(o => `
+    <article class="order ${o.status === 'pending' ? 'new' : ''}">
+      <div class="ohead">
+        <span><b>طلب #${esc(o.order_number)}</b> <span class="badge ${esc(o.status)}">${esc(STATUS[o.status] || o.status)}</span></span>
+        <time>${new Date(o.created_at).toLocaleString('ar-EG')}</time>
+      </div>
+      <p><b>${esc(o.customer_name)}</b> · <span dir="ltr">${esc(o.phone)}</span></p>
+      <p><small>العنوان:</small> ${esc(o.address)}</p>
+      ${o.notes ? `<p><small>ملاحظات:</small> ${esc(o.notes)}</p>` : ''}
+      <ul>${(o.order_items || []).map(x => `<li>${esc(x.product_name)} × ${x.quantity} — ${money(x.line_total)} ج.م</li>`).join('')}</ul>
+      <div class="ofoot">
+        <span class="total">الإجمالي: ${money(o.total)} ج.م</span>
+        <span class="contact">
+          <a class="call" href="tel:${esc(o.phone)}">📞 اتصال</a>
+          <a class="wa" href="${waLink(o.phone)}" target="_blank" rel="noopener">واتساب</a>
+        </span>
+        <label style="margin:0;font-size:.83rem">حالة الطلب
+          <select onchange="orderStatus('${o.id}', this.value)">
+            ${[['pending','جديد'],['preparing','قيد التنفيذ'],['out_for_delivery','خرج للتوصيل'],['delivered','تم التسليم'],['cancelled','ملغي']]
+              .map(([v, l]) => `<option value="${v}" ${v === o.status || (v === 'preparing' && o.status === 'confirmed') ? 'selected' : ''}>${l}</option>`).join('')}
+          </select>
+        </label>
+      </div>
+    </article>`).join('');
+}
+
+async function orderStatus(id, status) {
+  const { error } = await sb.from('orders').update({ status, updated_at: new Date().toISOString() }).eq('id', id);
+  if (error) { alert('تعذّر تحديث الحالة: ' + error.message); return; }
+  toast('تم تحديث حالة الطلب — العميل يقدر يتابعها من المتجر');
+  await loadOrders(); renderStats(); renderOrders();
+}
+
+/* ---------- Products ---------- */
+function catName(id) { const c = CATS.find(x => x.id === id); return c ? c.name : '—'; }
+
+function renderProducts() {
+  const q = ($('#prodSearch').value || '').trim();
+  const list = PRODS.filter(p => !q || p.name.includes(q));
+  const grid = $('#productsGrid');
+  if (!list.length) {
+    grid.innerHTML = '<div class="empty" style="grid-column:1/-1">مفيش منتجات مطابقة. جرّبي تضيفي أول منتج من زرار «إضافة منتج».</div>';
+    return;
+  }
+  grid.innerHTML = list.map(p => `
+    <div class="pc ${p.is_active === false ? 'off' : ''}">
+      <div class="pi">${p.image_url ? `<img src="${esc(p.image_url)}" alt="">` : esc(p.emoji || '🍬')}</div>
+      <div class="pb">
+        <span class="cat">${esc(catName(p.category_id))}${p.is_new ? ' · وصل حديثًا' : ''}${p.is_active === false ? ' · مخفي' : ''}</span>
+        <span class="nm">${esc(p.name)}</span>
+        <span class="pr">${money(p.price)} ج.م ${p.old_price ? `<s>${money(p.old_price)}</s>` : ''}</span>
+        <div class="pa">
+          <button class="btn ghost small" onclick="openForm('${p.id}')">تعديل</button>
+          <button class="btn danger small" onclick="deleteProduct('${p.id}')">حذف</button>
+        </div>
+      </div>
+    </div>`).join('');
+}
+
+function fillCatSelect(selectedId) {
+  const sel = $('#fCat');
+  sel.innerHTML = CATS.map(c => `<option value="${c.id}">${esc(c.emoji || '')} ${esc(c.name)}</option>`).join('')
+    + '<option value="__new">＋ قسم جديد…</option>';
+  if (selectedId) sel.value = selectedId;
+  toggleNewCat();
+}
+
+function toggleNewCat() {
+  $('#newCatBox').classList.toggle('hidden', $('#fCat').value !== '__new');
+}
+
+function previewImage() {
+  const f = $('#fImage').files[0];
+  if (!f) return;
+  const r = new FileReader();
+  r.onload = () => { $('#imgPrevEl').src = r.result; $('#imgPrev').style.display = 'grid'; };
+  r.readAsDataURL(f);
+}
+
+function openForm(id) {
+  const p = id ? PRODS.find(x => x.id === id) : null;
+  $('#formTitle').textContent = p ? 'تعديل: ' + p.name : 'إضافة منتج جديد';
+  $('#formMsg').textContent = '';
+  $('#fId').value = p ? p.id : '';
+  $('#fName').value = p ? p.name : '';
+  $('#fSub').value = p ? (p.subtitle || '') : '';
+  $('#fPrice').value = p ? p.price : '';
+  $('#fOld').value = p && p.old_price != null ? p.old_price : '';
+  $('#fBrand').value = p ? (p.brand || 'Snack House') : 'Snack House';
+  $('#fEmoji').value = p ? (p.emoji || '') : '';
+  $('#fRating').value = p ? (p.rating ?? 4.5) : 4.5;
+  $('#fReviews').value = p ? (p.review_count ?? 0) : 0;
+  $('#fNew').checked = p ? !!p.is_new : false;
+  $('#fActive').checked = p ? p.is_active !== false : true;
+  $('#fImage').value = '';
+  fillCatSelect(p ? p.category_id : undefined);
+  if (p && p.image_url) { $('#imgPrevEl').src = p.image_url; $('#imgPrev').style.display = 'grid'; }
+  else $('#imgPrev').style.display = 'none';
+  showTab('form');
+}
+
+async function uploadImage(file) {
+  const ext = (file.name.split('.').pop() || 'jpg').toLowerCase();
+  const path = 'products/admin/' + crypto.randomUUID() + '.' + ext;
+  const { error } = await sb.storage.from('product-images').upload(path, file, { upsert: true, contentType: file.type });
+  if (error) throw error;
+  return sb.storage.from('product-images').getPublicUrl(path).data.publicUrl;
+}
+
+async function ensureCategory() {
+  if ($('#fCat').value !== '__new') return $('#fCat').value;
+  const name = $('#fNewCat').value.trim();
+  if (!name) throw new Error('اكتبي اسم القسم الجديد');
+  const row = {
+    name, slug: 'c' + Date.now().toString(36),
+    emoji: $('#fNewCatEmoji').value.trim() || '🍬',
+    gradient: '#6b0f3a,#c2185b', image_url: null,
+    sort_order: CATS.length, is_active: true, updated_at: new Date().toISOString()
+  };
+  const { data, error } = await sb.from('categories').insert(row).select('id').single();
+  if (error) throw error;
+  return data.id;
+}
+
+async function saveProduct(e) {
+  e.preventDefault();
+  const msg = $('#formMsg'), btn = $('#saveBtn');
+  btn.disabled = true; msg.style.color = 'var(--mut)'; msg.textContent = 'جارٍ الحفظ…';
+  try {
+    const id = $('#fId').value;
+    const existing = id ? PRODS.find(x => x.id === id) : null;
+    const category_id = await ensureCategory();
+    let image_url = existing ? existing.image_url : null;
+    const file = $('#fImage').files[0];
+    if (file) image_url = await uploadImage(file);
+    const row = {
+      category_id,
+      name: $('#fName').value.trim(),
+      subtitle: $('#fSub').value.trim() || null,
+      price: Number($('#fPrice').value) || 0,
+      old_price: $('#fOld').value === '' ? null : Number($('#fOld').value),
+      brand: $('#fBrand').value.trim() || 'Snack House',
+      emoji: $('#fEmoji').value.trim() || '🍬',
+      image_url,
+      rating: Number($('#fRating').value) || 4.5,
+      review_count: Number($('#fReviews').value) || 0,
+      is_new: $('#fNew').checked,
+      is_active: $('#fActive').checked,
+      updated_at: new Date().toISOString()
+    };
+    if (id) {
+      const { error } = await sb.from('products').update(row).eq('id', id);
+      if (error) throw error;
+    } else {
+      row.sort_order = PRODS.length;
+      const { error } = await sb.from('products').insert(row);
+      if (error) throw error;
+    }
+    toast(id ? 'تم حفظ التعديلات' : 'تمت إضافة المنتج — بقى ظاهر في المتجر');
+    await loadCatalog(); renderAll(); showTab('products');
+  } catch (err) {
+    msg.style.color = 'var(--danger)';
+    msg.textContent = 'تعذّر الحفظ: ' + (err.message || err);
+  } finally { btn.disabled = false; }
+}
+
+async function deleteProduct(id) {
+  const p = PRODS.find(x => x.id === id);
+  if (!confirm('حذف «' + (p ? p.name : 'المنتج') + '» نهائيًا من المتجر؟')) return;
+  const { error } = await sb.from('products').delete().eq('id', id);
+  if (error) { alert('تعذّر الحذف: ' + error.message); return; }
+  toast('تم حذف المنتج');
+  await loadCatalog(); renderAll();
+}
+
+init();
+</script>
+</body>
+</html>
