@@ -4,6 +4,13 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>لوحة إدارة Snack House</title>
+<meta name="theme-color" content="#6b0f3a">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="إدارة Snack House">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%23f6a02e'/%3E%3Cstop offset='1' stop-color='%23c2185b'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='100' height='100' rx='22' fill='url(%23g)'/%3E%3Ctext x='50' y='70' font-size='54' text-anchor='middle'%3E%F0%9F%8D%AC%3C/text%3E%3C/svg%3E">
+<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%23f6a02e'/%3E%3Cstop offset='1' stop-color='%23c2185b'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='100' height='100' rx='22' fill='url(%23g)'/%3E%3Ctext x='50' y='70' font-size='54' text-anchor='middle'%3E%F0%9F%8D%AC%3C/text%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Readex+Pro:wght@300;400;600&family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -109,7 +116,31 @@ label textarea{min-height:74px;resize:vertical}
 #toast{position:fixed;bottom:22px;inset-inline:0;margin:auto;width:max-content;max-width:92%;background:var(--ink);color:#fff;border-radius:99px;padding:12px 24px;z-index:90;opacity:0;transform:translateY(16px);transition:.3s;pointer-events:none;text-align:center}
 #toast.on{opacity:1;transform:none}
 .hidden{display:none!important}
-@media(max-width:640px){.frow{grid-template-columns:1fr}.hbar{gap:8px}.btn{padding:9px 15px}}
+.installhint{display:none;background:#fff3d6;border:1px solid #ecd28a;border-radius:16px;padding:14px 16px;margin:18px 0 0;font-size:.88rem;line-height:1.8}
+.installhint b{color:var(--wine)}
+.installhint button{float:left;background:none;border:0;font-size:1.05rem;color:var(--mut)}
+@media(max-width:640px){
+ .frow{grid-template-columns:1fr}.hbar{gap:8px}.btn{padding:9px 15px}
+ .wrap{padding-bottom:118px}
+ .stats{grid-template-columns:repeat(2,1fr);gap:9px;margin-top:18px}
+ .stat{padding:13px 8px}.stat b{font-size:1.35rem}
+ /* bottom app-style tab bar on phones */
+ .tabs{position:fixed;bottom:0;inset-inline:0;z-index:60;margin:0;background:#fffdfb;box-shadow:0 -4px 24px #6b0f3a1f;padding:8px 10px calc(8px + env(safe-area-inset-bottom,0px));display:flex;flex-wrap:nowrap}
+ .tabs button{flex:1;padding:12px 4px;font-size:.86rem;border-radius:14px;min-height:48px}
+ .pgrid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+ .pb{padding:10px}.pa .btn{min-height:42px}
+ input,select,textarea{font-size:16px!important} /* prevents iOS auto-zoom */
+ .toolbar input[type=search]{min-height:48px}
+ .chips{flex-wrap:nowrap;overflow-x:auto;padding-bottom:4px;max-width:100%}
+ .chips button{white-space:nowrap;min-height:40px}
+ .order{padding:15px 13px;border-radius:16px}
+ .ofoot select{min-height:44px}
+ .contact a{padding:10px 16px}
+ .login{margin-top:4vh;padding:26px 20px}
+ .formcard{padding:18px 15px}
+ .installhint{display:block}
+ header .hbar .btn.ghost.small[href]{display:none} /* store link hidden on small phones to save space */
+}
 </style>
 </head>
 <body>
@@ -140,6 +171,11 @@ label textarea{min-height:74px;resize:vertical}
 
   <!-- ===== Dashboard ===== -->
   <main id="dashView" class="hidden">
+    <div class="installhint" id="installHint">
+      <button onclick="document.getElementById('installHint').remove()" aria-label="إغلاق">✕</button>
+      <b>📱 عايزة الصفحة دي كأنها تطبيق على فونك؟</b><br>
+      من متصفح الفون: <b>أندرويد (Chrome):</b> القائمة ⋮ ← «إضافة إلى الشاشة الرئيسية». <b>آيفون (Safari):</b> زرار المشاركة ← «إضافة إلى الشاشة الرئيسية». هتظهر لك أيقونة 🍬 تفتح لوحة الإدارة على طول بملء الشاشة.
+    </div>
     <div class="stats">
       <div class="stat"><b id="stNew">0</b><span>طلبات جديدة</span></div>
       <div class="stat"><b id="stPrep">0</b><span>قيد التنفيذ</span></div>
@@ -556,6 +592,26 @@ async function deleteProduct(id) {
   toast('تم حذف المنتج');
   await loadCatalog(); renderAll();
 }
+
+/* Make the page installable on a phone (single-file web app manifest) */
+try {
+  const icon = document.querySelector('link[rel="icon"]').href;
+  const manifest = {
+    name: 'لوحة إدارة Snack House', short_name: 'Snack House',
+    start_url: location.href.split('#')[0], scope: location.href.split('#')[0],
+    display: 'standalone', dir: 'rtl', lang: 'ar',
+    background_color: '#faf7f2', theme_color: '#6b0f3a',
+    icons: [{ src: icon, sizes: 'any', type: 'image/svg+xml', purpose: 'any' }]
+  };
+  const link = document.createElement('link');
+  link.rel = 'manifest';
+  link.href = URL.createObjectURL(new Blob([JSON.stringify(manifest)], { type: 'application/json' }));
+  document.head.appendChild(link);
+  if (window.matchMedia('(display-mode: standalone)').matches) {
+    const hint = document.getElementById('installHint');
+    if (hint) hint.remove();
+  }
+} catch (e) { /* installing is optional; the page works in the browser too */ }
 
 init();
 </script>
