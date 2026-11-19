@@ -636,7 +636,7 @@ const BXS={};
 function bxCart(){const bid='box:'+Date.now().toString(36);BXS[bid]={items:[...BX]};C[bid]=1;const b=$('#cb');if(b){$('#cn').textContent=Object.values(C).reduce((a,c)=>a+c,0);b.classList.remove('bump');void b.offsetWidth;b.classList.add('bump')}bxClose();BX=[];CLOSED=false;LASTI=-1;toast('تمت إضافة الصندوق للسلة');cartO()}
 function card(o){const p=nm(o.p),d=p.old>p.pr?Math.round((1-p.pr/p.old)*100):0,g=T[o.k].g;
  return `<div class="pc rv"><div class="pi" style="background:linear-gradient(135deg,${g})">${p.img?`<img${p.img.startsWith('data:image/webp')?' class="tr"':''} src="${p.img}" alt="">`:`<span>${p.e}</span>`}${d?`<b class="pd">-${d}%</b>`:''}${p.nw?'<b class="pn">وصل حديثًا</b>':''}<div class="pa"><button class="${W.has(o.id)?'on':''}" aria-label="إضافة للمفضلة" title="المفضلة" onclick="wish('${o.id}')">♥</button></div></div>
- <div class="pb"><span class="br">${esc(p.br)}</span><span class="pt">${esc(p.n)}</span><span class="st"><u>${'★'.repeat(Math.round(p.r))}</u> ${p.r} (${p.rv})</span><div class="pr"><button class="add" aria-label="أضف للسلة" onclick="addc('${o.id}')">+</button><div>${p.old>p.pr?`<s>${p.old} ج.م</s>`:''}${p.pr} ج.م</div></div></div></div>`}
+ <div class="pb"><span class="br">${esc(p.br)}</span><span class="pt">${esc(p.n)}</span><div class="pr"><button class="add" aria-label="أضف للسلة" onclick="addc('${o.id}')">+</button><div>${p.old>p.pr?`<s>${p.old} ج.م</s>`:''}${p.pr} ج.م</div></div></div></div>`}
 function hdr(){const n=Object.values(C).reduce((a,b)=>a+b,0),ann=S.ann.split('|').map(x=>`<span class="i">${esc(x)}</span>`).join('');
  const nv=(l,a,on)=>`<button class="${on?'on':''}" onclick="${a}">${l}</button>`;
  return `<div class="ann"><div class="mq"><div class="tr">${ann+ann+ann+ann}</div></div></div>
@@ -700,7 +700,7 @@ function qty(id,d){C[id]=Math.max(0,(C[id]||0)+d);cartO();render(1);$('.ov').cla
 const SB_URL='https://jsfyvxtmgizgpnqabvbz.supabase.co';
 const SB_KEY='sb_publishable_r_EDSgJ_PfQbKHFRcwkOsw_r3MxEl2t';
 let sb=null,DB_CAT_IDS={},DB_IDS={},orderSubmitting=false;
-let trackingTimer=null,lastCreatedOrderNumber='',lastCreatedPhone='';
+let trackingTimer=null,lastCreatedOrderNumber='',lastCreatedPhone='',lastCreatedName='';
 async function initSupabase(){
  try{
   if(!window.supabase||!window.supabase.createClient)throw new Error('تعذر تحميل مكتبة الاتصال');
@@ -725,7 +725,7 @@ function closeOrderTracking(){
  if(trackingTimer){clearInterval(trackingTimer);trackingTimer=null;}
  const modal=document.getElementById('sh-track-modal');if(modal)modal.remove();
 }
-function trackOrderOpen(orderNumber='',phone=''){
+function trackOrderOpen(name='',phone=''){
  if(!sb){toast('استني لحظة لحد ما الاتصال يجهز');return;}
  closeOrderTracking();
  const modal=document.createElement('div');
@@ -734,18 +734,18 @@ function trackOrderOpen(orderNumber='',phone=''){
   <button class="sh-track-close" type="button" onclick="closeOrderTracking()" aria-label="إغلاق">×</button>
   <div class="sh-track-mark">📦</div>
   <h2 id="sh-track-title">تابع طلبك</h2>
-  <p class="sh-track-intro">اكتبي رقم الطلب ورقم الموبايل المسجل وقت الشراء لمعرفة آخر تحديث.</p>
+  <p class="sh-track-intro">اكتبي الاسم ورقم الموبايل المسجلين وقت الشراء وهنعرضلك طلباتك وآخر حالة ليها.</p>
   <form onsubmit="trackOrderSearch(event)">
-   <label>رقم الطلب<input id="sh-track-number" inputmode="numeric" required placeholder="مثال: 37" value="${esc(String(orderNumber||''))}"></label>
+   <label>الاسم<input id="sh-track-name" type="text" required placeholder="الاسم المستخدم في الطلب" value="${esc(String(name||''))}"></label>
    <label>رقم الموبايل<input id="sh-track-phone" type="tel" required placeholder="رقم الموبايل المستخدم في الطلب" value="${esc(String(phone||''))}"></label>
-   <button class="sh-track-submit" type="submit">عرض حالة الطلب</button>
+   <button class="sh-track-submit" type="submit">عرض طلباتي</button>
   </form>
   <div id="sh-track-result" aria-live="polite"></div>
-  <small class="sh-track-privacy">بيانات الطلب لا تظهر إلا عند إدخال رقم الطلب ورقم الهاتف المطابقين.</small>
+  <small class="sh-track-privacy">هنعرض بس الطلبات المسجلة بنفس الاسم ورقم الموبايل.</small>
  </section>`;
  modal.addEventListener('click',e=>{if(e.target===modal)closeOrderTracking();});
  document.body.appendChild(modal);
- if(orderNumber&&phone)setTimeout(()=>trackOrderSearch(null),120);
+ if(name&&phone)setTimeout(()=>trackOrderSearch(null),120);
 }
 function trackingStatusView(order){
  const labels=['طلب جديد','قيد التنفيذ','خرج للتوصيل','تم التسليم'];
@@ -763,28 +763,57 @@ function trackingStatusView(order){
   ${order.total!=null?`<div class="sh-track-total">إجمالي الطلب <b>${Number(order.total).toLocaleString('ar-EG')} ج.م</b></div>`:''}
   <button type="button" class="sh-track-refresh" onclick="trackOrderSearch(null,true)">تحديث الحالة الآن</button>`;
 }
+let trackOrdersCache=[];
+function trackToggle(i){
+ const box=document.getElementById('sh-track-detail-'+i);
+ if(!box)return;
+ if(box.style.display!=='none'){box.style.display='none';return;}
+ box.innerHTML=trackingStatusView(trackOrdersCache[i]);
+ box.style.display='block';
+}
 async function trackOrderSearch(e,silent=false){
  if(e)e.preventDefault();
- const number=document.getElementById('sh-track-number')?.value.trim();
+ const name=document.getElementById('sh-track-name')?.value.trim();
  const phone=document.getElementById('sh-track-phone')?.value.trim();
  const result=document.getElementById('sh-track-result');
- if(!number||!/^\d+$/.test(number)||!phone){if(result)result.innerHTML='<p class="sh-track-error">اكتبي رقم طلب صحيح ورقم الموبايل.</p>';return;}
- if(!silent&&result)result.innerHTML='<p class="sh-track-loading">جارٍ البحث عن طلبك...</p>';
+ const digits=(phone||'').replace(/\D/g,'');
+ if(!name||name.length<3||digits.length<10){if(result)result.innerHTML='<p class="sh-track-error">اكتبي الاسم ورقم موبايل صحيح.</p>';return;}
+ if(!silent&&result)result.innerHTML='<p class="sh-track-loading">جارٍ البحث عن طلباتك...</p>';
  try{
-  const {data,error}=await sb.rpc('track_order',{p_order_number:Number(number),p_phone:phone});
+  const {data,error}=await sb.rpc('track_orders_by_name_phone',{p_name:name,p_phone:phone});
   if(error)throw error;
-  const order=Array.isArray(data)?data[0]:data;
-  if(!order){
-   if(result)result.innerHTML='<p class="sh-track-error">مش لاقيين طلب بالرقم ورقم الموبايل دول. راجعي البيانات وحاولي تاني.</p>';
+  const orders=Array.isArray(data)?data:(data?[data]:[]);
+  if(!orders.length){
+   if(result)result.innerHTML='<p class="sh-track-error">مش لاقيين طلبات بالاسم ورقم الموبايل دول. اتأكدي إن الاسم مكتوب زي ما اتسجل وقت الطلب وحاولي تاني.</p>';
    if(trackingTimer){clearInterval(trackingTimer);trackingTimer=null;}
    return;
   }
-  if(result)result.innerHTML=trackingStatusView(order);
+  trackOrdersCache=orders;
+  const LBL={pending:'جديد',confirmed:'قيد التنفيذ',preparing:'قيد التنفيذ',out_for_delivery:'خرج للتوصيل',delivered:'تم التسليم',cancelled:'ملغي'};
+  let html=trackingStatusView(orders[0]);
+  for(let i=1;i<orders.length;i++){
+   const o=orders[i],dt=new Date(o.updated_at||o.created_at);
+   html+='<div style="border:1px solid var(--line);border-radius:14px;padding:12px 14px;margin-top:12px">'
+    +'<div style="display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;align-items:center">'
+    +'<b>طلب #'+esc(String(o.order_number))+'</b>'
+    +'<span>'+esc(LBL[o.status]||o.status||'')+'</span>'
+    +'<span>'+esc(dt.toLocaleDateString('ar-EG'))+'</span>'
+    +'<b>'+esc(Number(o.total||0).toLocaleString('ar-EG'))+' ج.م</b>'
+    +'<button type="button" class="sh-track-refresh" onclick="trackToggle('+i+')">عرض الحالة</button>'
+    +'</div><div id="sh-track-detail-'+i+'" style="display:none"></div></div>';
+  }
+  if(result)result.innerHTML=html;
   if(trackingTimer)clearInterval(trackingTimer);
   trackingTimer=setInterval(()=>trackOrderSearch(null,true),20000);
  }catch(err){
   console.error('Order tracking:',err);
-  if(!silent&&result)result.innerHTML=`<p class="sh-track-error">تعذر جلب حالة الطلب: ${esc(err.message||'حاولي مرة أخرى.')}</p>`;
+  if(!silent&&result){
+   if(err&&(err.code==='PGRST202'||/track_orders_by_name_phone/.test(err.message||''))){
+    result.innerHTML='<p class="sh-track-error">تتبع الطلب بيتفعّل دلوقتي، جربي كمان شوية أو كلمينا واتساب ونقولك حالة طلبك.</p>';
+   }else{
+    result.innerHTML=`<p class="sh-track-error">تعذر جلب حالة الطلب: ${esc(err.message||'حاولي مرة أخرى.')}</p>`;
+   }
+  }
  }
 }
 
@@ -834,7 +863,7 @@ async function submitOrder(e){
   if(!savedOrder)throw new Error('لم يصل تأكيد من قاعدة البيانات. راجعي الطلبات قبل إعادة المحاولة.');
   Object.keys(C).forEach(k=>delete C[k]);BX=[];CLOSED=false;Object.keys(BXS).forEach(k=>delete BXS[k]);
   lastCreatedOrderNumber=String(savedOrder.order_number||savedOrder.id||'');
-  lastCreatedPhone=$('#coPhone').value.trim();
+  lastCreatedPhone=$('#coPhone').value.trim();lastCreatedName=$('#coName').value.trim();
   const safeNumber=esc(String(savedOrder.order_number||savedOrder.id||'—'));
   const total=Number(savedOrder.total);
   const finalTotal=Number.isFinite(total)?total:subtotal;
@@ -869,7 +898,7 @@ async function submitOrder(e){
      </div>
     </section>
     <div class="sh-confirm-actions">
-     <button class="sh-confirm-secondary" type="button" onclick="trackOrderOpen(lastCreatedOrderNumber,lastCreatedPhone)">طلباتي</button>
+     <button class="sh-confirm-secondary" type="button" onclick="trackOrderOpen(lastCreatedName,lastCreatedPhone)">طلباتي</button>
      <button class="sh-confirm-primary" type="button" onclick="document.getElementById('sh-order-success')?.remove();go('home')">متابعة التسوق</button>
     </div>
    </div>
@@ -1430,6 +1459,13 @@ footer .wm-name.sm{font-size:2.3rem;color:#fdf3df}
       var ens=document.createElement('span'); ens.className='cat-en'; ens.textContent=en;
       txt.replaceWith(ens,ar);
     });
+    var row=app.querySelector('.cats');
+    if(row&&!row.dataset.dots){row.dataset.dots='1';
+      var n=row.querySelectorAll('.cat').length;
+      if(n>1){var dots=document.createElement('div');dots.className='cats-dots';
+        for(var i=0;i<n;i++){var d=document.createElement('span');if(!i)d.className='on';dots.appendChild(d);}
+        row.after(dots);
+        row.addEventListener('scroll',function(){var max=row.scrollWidth-row.clientWidth;if(max<=0)return;var p=Math.min(1,Math.abs(row.scrollLeft)/max);var idx=Math.round(p*(n-1));dots.querySelectorAll('span').forEach(function(d,j){d.classList.toggle('on',j===idx)});},{passive:true});}}
   }
 
   function sections(app){
@@ -1498,5 +1534,26 @@ header .lgi{width:auto!important;height:125px;object-fit:contain!important;borde
 .ann .tr{display:flex;width:max-content;direction:ltr;animation:annMq 100s linear infinite}
 .ann .tr .i{direction:rtl}
 @keyframes annMq{to{transform:translateX(-50%)}}
+</style>
+
+<style id="snack-mobile-tweaks">
+.cats-dots{display:none}
+@media(max-width:860px){
+  /* phone: no explore-categories button, no hero dots */
+  .hero .b2{display:none!important}
+  .hero-dots{display:none!important}
+  /* phone: product photos fill their frame exactly, one uniform look */
+  .pc .pi img{object-fit:cover!important;padding:0!important}
+  /* phone: category row — next tile peeks in + dots show there is more */
+  .cats>.cat{flex-basis:29%!important}
+  .cats-dots{display:flex;gap:6px;justify-content:center;margin:2px 0 0}
+  .cats-dots span{width:7px;height:7px;border-radius:50%;background:#d8c3a5;transition:all .25s}
+  .cats-dots span.on{background:#d9a441;width:18px;border-radius:99px}
+}
+</style>
+
+<style id="snack-header-scroll">
+/* ===== Desktop: header scrolls away with the page (like on the phone), not sticky ===== */
+@media(min-width:861px){header{position:static!important;top:auto!important}}
 </style>
 </body></html>

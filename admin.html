@@ -241,10 +241,7 @@ label textarea{min-height:74px;resize:vertical}
             <label>الماركة<input id="fBrand" value="Snack House"></label>
             <label>إيموجي المنتج (لو مفيش صورة)<input id="fEmoji" placeholder="🍫" maxlength="4"></label>
           </div>
-          <div class="frow">
-            <label>التقييم<input id="fRating" type="number" min="0" max="5" step="0.1" value="4.5"></label>
-            <label>عدد التقييمات<input id="fReviews" type="number" min="0" step="1" value="0"></label>
-          </div>
+          
           <label>صورة المنتج<input id="fImage" type="file" accept="image/*" onchange="previewImage()"></label>
           <div class="imgprev" id="imgPrev"><img id="imgPrevEl" alt="معاينة صورة المنتج"></div>
           <div class="frow" style="margin-top:16px">
@@ -508,8 +505,6 @@ function openForm(id) {
   $('#fOld').value = p && p.old_price != null ? p.old_price : '';
   $('#fBrand').value = p ? (p.brand || 'Snack House') : 'Snack House';
   $('#fEmoji').value = p ? (p.emoji || '') : '';
-  $('#fRating').value = p ? (p.rating ?? 4.5) : 4.5;
-  $('#fReviews').value = p ? (p.review_count ?? 0) : 0;
   $('#fNew').checked = p ? !!p.is_new : false;
   $('#fActive').checked = p ? p.is_active !== false : true;
   $('#fImage').value = '';
@@ -562,8 +557,6 @@ async function saveProduct(e) {
       brand: $('#fBrand').value.trim() || 'Snack House',
       emoji: $('#fEmoji').value.trim() || '🍬',
       image_url,
-      rating: Number($('#fRating').value) || 4.5,
-      review_count: Number($('#fReviews').value) || 0,
       is_new: $('#fNew').checked,
       is_active: $('#fActive').checked,
       updated_at: new Date().toISOString()
