@@ -1552,8 +1552,12 @@ header .lgi{width:auto!important;height:125px;object-fit:contain!important;borde
   .cats-dots{display:flex;gap:6px;justify-content:center;margin:2px 0 0}
   .cats-dots span{width:7px;height:7px;border-radius:50%;background:#d8c3a5;transition:all .25s}
   .cats-dots span.on{background:#d9a441;width:18px;border-radius:99px}
-  /* phone: Shop Now keeps its desktop size and place under the text (not stretched) */
+  /* phone: Shop Now keeps its desktop size, at the left like on desktop */
+  .mock-hero .cta{justify-content:flex-start!important}
   .mock-hero .cta .b1{flex:none!important;min-height:0!important;width:auto!important;padding:11px 26px!important;font-size:.95rem!important}
+  /* phone: smaller product cards (home rails + slightly shorter catalog cards) */
+  .grid>.pc{flex-basis:60vw!important;width:60vw!important}
+  .lay>.grid .pi{aspect-ratio:1/.9!important}
 }
 </style>
 
