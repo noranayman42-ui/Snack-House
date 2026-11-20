@@ -1574,8 +1574,8 @@ header .lgi{width:auto!important;height:125px;object-fit:contain!important;borde
 .pv-ov.on{opacity:1}
 .pv-card{background:#fdf8ef;color:var(--ink);width:100%;max-height:92vh;overflow:auto;border-radius:22px 22px 0 0;transform:translateY(26px);transition:transform .28s;position:relative;box-shadow:0 -12px 44px rgba(36,17,5,.35)}
 .pv-ov.on .pv-card{transform:none}
-.pv-img{position:relative;height:290px;background:linear-gradient(135deg,#4e2413,#7a4a26);flex:none}
-.pv-img img{width:100%;height:100%;object-fit:cover;display:block}
+.pv-img{position:relative;height:300px;background:radial-gradient(120% 105% at 50% 28%,#fffdf8 0%,#f7ecd7 68%,#f1e0c6 100%);flex:none;overflow:hidden}
+.pv-img .pv-fg{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;padding:8px;box-sizing:border-box;mix-blend-mode:multiply}
 .pv-emoji{font-size:110px;display:flex;align-items:center;justify-content:center;height:100%}
 .pv-x{position:absolute;top:12px;inset-inline-start:12px;width:38px;height:38px;border-radius:50%;border:0;background:rgba(253,248,239,.95);color:#2c1a0f;font-size:16px;cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,.22);z-index:2;line-height:1}
 .pv-off{position:absolute;bottom:12px;inset-inline-end:12px;background:#b3541e;color:#fff;font-size:.8rem;padding:5px 12px;border-radius:99px}
@@ -1621,7 +1621,7 @@ header .lgi{width:auto!important;height:125px;object-fit:contain!important;borde
   var ov=document.createElement('div');
   ov.className='pv-ov'; ov.id='pvOv';
   ov.innerHTML='<div class="pv-card" role="dialog" aria-modal="true">'
-   +'<div class="pv-img">'+(p.img?'<img src="'+p.img+'" alt="">':'<span class="pv-emoji">'+p.e+'</span>')
+   +'<div class="pv-img">'+(p.img?'<img class="pv-fg" src="'+p.img+'" alt="">':'<span class="pv-emoji">'+p.e+'</span>')
    +(d?'<b class="pv-off">-'+d+'%</b>':'')
    +(p.nw?'<b class="pv-new">وصل حديثًا</b>':'')
    +'<button class="pv-x" aria-label="إغلاق" onclick="closePv()">✕</button></div>'
