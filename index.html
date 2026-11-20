@@ -607,7 +607,7 @@ let S={ht:'كل سناكاتك المفضلة في مكان واحد!',hp:'اك�
 try{const sv=JSON.parse($('#sh-data').textContent);if(sv&&sv.T&&Object.keys(sv.T).length){T=sv.T;S=Object.assign(S,sv.S||{});G=!!sv.G}}catch(e){}
 const R={v:'home',cat:'',sub:'',q:'',mode:'',sort:'pop',max:0,br:[]},C={},W=new Set();let AC=Object.keys(T)[0];
 const P=()=>Object.entries(T).flatMap(([k,t])=>t.p_.map((p,i)=>({k,i,p,id:k+':'+i})));
-const nm=p=>({n:p[0],sub:p[1],pr:+p[2]||0,e:p[3]||'🍬',img:p[4],br:p[5]||'Snack House',old:+p[6]||0,r:+p[7]||4.5,rv:+p[8]||40,nw:p[9]==='new'});
+const nm=p=>({n:p[0],sub:p[1],pr:+p[2]||0,e:p[3]||'🍬',img:p[4],br:p[5]||'Snack House',old:+p[6]||0,r:+p[7]||4.5,rv:+p[8]||40,nw:p[9]==='new',desc:p[10]||''});
 function catImg(k){const t=T[k],im=t.p_.map(p=>p[4]).filter(Boolean);return t.img||im.find(u=>u.startsWith('data:image/webp'))||im[0]||''}
 
 let BX=[],CLOSED=false,LASTI=-1,BXF='',DM=null;
@@ -718,7 +718,7 @@ async function loadPublicCatalog(){
  if(!cats||!cats.length)return false;
  const next={},catIds={},prodIds={};
  cats.forEach(c=>{const k=c.slug;next[k]={n:c.name,e:c.emoji||'🍬',g:c.gradient||'#6b0f3a,#c2185b',img:c.image_url||'',p_:[]};catIds[k]=c.id;prodIds[k]=[];});
- prods.forEach(p=>{const c=cats.find(x=>x.id===p.category_id);if(!c)return;const k=c.slug;next[k].p_.push([p.name,p.subtitle||'',Number(p.price),p.emoji||'🍬',p.image_url||'',p.brand||'Snack House',p.old_price==null?'':Number(p.old_price),Number(p.rating||4.5),Number(p.review_count||0),p.is_new?'new':'']);prodIds[k].push(p.id);});
+ prods.forEach(p=>{const c=cats.find(x=>x.id===p.category_id);if(!c)return;const k=c.slug;next[k].p_.push([p.name,p.subtitle||'',Number(p.price),p.emoji||'🍬',p.image_url||'',p.brand||'Snack House',p.old_price==null?'':Number(p.old_price),Number(p.rating||4.5),Number(p.review_count||0),p.is_new?'new':'',p.description||'']);prodIds[k].push(p.id);});
  T=next;DB_CAT_IDS=catIds;DB_IDS=prodIds;AC=Object.keys(T)[0]||'';render(1);return true;
 }
 function closeOrderTracking(){
@@ -1565,4 +1565,96 @@ header .lgi{width:auto!important;height:125px;object-fit:contain!important;borde
 /* ===== Desktop: header scrolls away with the page (like on the phone), not sticky ===== */
 @media(min-width:861px){header{position:static!important;top:auto!important}}
 </style>
+
+<style id="snack-pview">
+.pc .pi,.pc .pb{cursor:pointer}
+.pc .pi .pv-hint{position:absolute;bottom:10px;inset-inline-start:10px;background:rgba(44,26,15,.82);color:#fdf8ef;font-size:.72rem;font-weight:700;padding:5px 11px;border-radius:99px;opacity:0;transform:translateY(4px);transition:.25s;pointer-events:none}
+@media(hover:hover){.pc:hover .pi .pv-hint{opacity:1;transform:none}}
+.pv-ov{position:fixed;inset:0;background:rgba(36,17,5,.55);backdrop-filter:blur(3px);z-index:1400;display:flex;align-items:flex-end;justify-content:center;opacity:0;transition:opacity .25s}
+.pv-ov.on{opacity:1}
+.pv-card{background:#fdf8ef;color:var(--ink);width:100%;max-height:92vh;overflow:auto;border-radius:22px 22px 0 0;transform:translateY(26px);transition:transform .28s;position:relative;box-shadow:0 -12px 44px rgba(36,17,5,.35)}
+.pv-ov.on .pv-card{transform:none}
+.pv-img{position:relative;height:290px;background:linear-gradient(135deg,#4e2413,#7a4a26);flex:none}
+.pv-img img{width:100%;height:100%;object-fit:cover;display:block}
+.pv-emoji{font-size:110px;display:flex;align-items:center;justify-content:center;height:100%}
+.pv-x{position:absolute;top:12px;inset-inline-start:12px;width:38px;height:38px;border-radius:50%;border:0;background:rgba(253,248,239,.95);color:#2c1a0f;font-size:16px;cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,.22);z-index:2;line-height:1}
+.pv-off{position:absolute;bottom:12px;inset-inline-end:12px;background:#b3541e;color:#fff;font-size:.8rem;padding:5px 12px;border-radius:99px}
+.pv-new{position:absolute;top:12px;inset-inline-end:12px;background:linear-gradient(135deg,#f2b04c,#de9222);color:#2a1a05;font-size:.75rem;padding:5px 12px;border-radius:99px}
+.pv-body{padding:20px 22px 24px}
+.pv-brand{color:var(--amber);font-weight:800;font-size:.8rem;letter-spacing:.02em}
+.pv-name{font-family:'El Messiri','Readex Pro',serif;font-size:1.55rem;line-height:1.35;margin:4px 0 2px;color:var(--wine)}
+.pv-sub{color:var(--mut);font-size:.95rem;margin:0 0 6px}
+.pv-desc{font-size:1rem;line-height:1.9;color:#4a3421;margin:10px 0 0;border-top:1px solid var(--line);padding-top:12px}
+.pv-foot{display:flex;align-items:center;gap:14px;margin-top:20px;flex-wrap:wrap}
+.pv-price{display:flex;flex-direction:column;line-height:1.2}
+.pv-price s{color:var(--mut);font-size:.9rem}
+.pv-price b{font-size:1.45rem;color:var(--wine)}
+.pv-add{flex:1;min-width:170px;height:48px;border:0;border-radius:99px;background:linear-gradient(135deg,#f2b04c,#de9222);color:#2a1a05;font-size:.98rem;font-weight:800;cursor:pointer;box-shadow:0 8px 18px #d9a44140;font-family:inherit}
+.pv-add:active{transform:scale(.98)}
+@media(min-width:861px){
+ .pv-ov{align-items:center;padding:26px}
+ .pv-card{border-radius:22px;max-width:840px;display:grid;grid-template-columns:1fr 1fr;overflow:hidden}
+ .pv-img{height:auto;min-height:400px}
+ .pv-body{display:flex;flex-direction:column;justify-content:center;overflow:auto}
+}
+</style>
+<script id="snack-pview-js">
+(function(){
+ function findId(card){
+  var b=card.querySelector('[onclick*="addc("]')||card.querySelector('[onclick*="wish("]');
+  if(!b)return null;
+  var m=(b.getAttribute('onclick')||'').match(/(?:addc|wish)\('([^']+)'\)/);
+  return m?m[1]:null;
+ }
+ window.closePv=function(){
+  var ov=document.getElementById('pvOv');
+  if(ov)ov.remove();
+  document.body.style.overflow='';
+ };
+ function openPv(id){
+  var o=null;
+  try{o=P().find(function(x){return x.id===id})}catch(e){}
+  if(!o)return;
+  var p=nm(o.p);
+  closePv();
+  var d=p.old>p.pr?Math.round((1-p.pr/p.old)*100):0;
+  var ov=document.createElement('div');
+  ov.className='pv-ov'; ov.id='pvOv';
+  ov.innerHTML='<div class="pv-card" role="dialog" aria-modal="true">'
+   +'<div class="pv-img">'+(p.img?'<img src="'+p.img+'" alt="">':'<span class="pv-emoji">'+p.e+'</span>')
+   +(d?'<b class="pv-off">-'+d+'%</b>':'')
+   +(p.nw?'<b class="pv-new">وصل حديثًا</b>':'')
+   +'<button class="pv-x" aria-label="إغلاق" onclick="closePv()">✕</button></div>'
+   +'<div class="pv-body"><span class="pv-brand">'+esc(p.br)+'</span>'
+   +'<h3 class="pv-name">'+esc(p.n)+'</h3>'
+   +(p.sub?'<p class="pv-sub">'+esc(p.sub)+'</p>':'')
+   +(p.desc?'<p class="pv-desc">'+esc(p.desc)+'</p>':'')
+   +'<div class="pv-foot"><div class="pv-price">'
+   +(p.old>p.pr?'<s>'+p.old+' ج.م</s>':'')+'<b>'+p.pr+' ج.م</b></div>'
+   +'<button class="pv-add" onclick="addc(\''+id+'\');closePv()">🛒 أضف إلى السلة</button>'
+   +'</div></div></div>';
+  ov.addEventListener('click',function(e){if(e.target===ov)closePv()});
+  document.body.appendChild(ov);
+  document.body.style.overflow='hidden';
+  requestAnimationFrame(function(){ov.classList.add('on')});
+ }
+ document.addEventListener('click',function(e){
+  if(e.target.closest('button,a,input,select,textarea,label'))return;
+  var card=e.target.closest('.pc');
+  if(!card)return;
+  var id=findId(card);
+  if(id)openPv(id);
+ });
+ document.addEventListener('keydown',function(e){if(e.key==='Escape')closePv()});
+ /* quick-view hint chip on card images */
+ new MutationObserver(function(){
+  document.querySelectorAll('.pc .pi').forEach(function(pi){
+   if(!pi.querySelector('.pv-hint')){
+    var s=document.createElement('span');s.className='pv-hint';s.textContent='👁 عرض سريع';
+    pi.appendChild(s);
+   }
+  });
+ }).observe(document.body,{childList:true,subtree:true});
+})();
+</script>
 </body></html>
