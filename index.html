@@ -795,7 +795,7 @@ async function trackOrderSearch(e,silent=false){
    const o=orders[i],dt=new Date(o.updated_at||o.created_at);
    html+='<div style="border:1px solid var(--line);border-radius:14px;padding:12px 14px;margin-top:12px">'
     +'<div style="display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;align-items:center">'
-    +'<b>طلب #'+esc(String(o.order_number))+'</b>'
+    +'<b>طلب سابق</b>'
     +'<span>'+esc(LBL[o.status]||o.status||'')+'</span>'
     +'<span>'+esc(dt.toLocaleDateString('ar-EG'))+'</span>'
     +'<b>'+esc(Number(o.total||0).toLocaleString('ar-EG'))+' ج.م</b>'
@@ -879,7 +879,6 @@ async function submitOrder(e){
     </div>
     <section class="sh-confirm-card">
      <div class="sh-confirm-top">
-      <div class="sh-confirm-meta"><small>رقم الطلب</small><strong dir="ltr">${safeNumber}</strong></div>
       <div class="sh-confirm-meta"><small>إجمالي الطلب</small><strong class="sh-confirm-total">${finalTotal.toLocaleString('ar-EG')} ج.م</strong></div>
      </div>
      <div class="sh-confirm-info">

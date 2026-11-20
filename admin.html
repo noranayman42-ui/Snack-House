@@ -194,7 +194,7 @@ label textarea{min-height:74px;resize:vertical}
     <!-- Orders tab -->
     <section id="tabOrders">
       <div class="toolbar">
-        <input type="search" id="orderSearch" placeholder="ابحثي برقم الطلب، اسم العميل، أو رقم الموبايل…" oninput="renderOrders()">
+        <input type="search" id="orderSearch" placeholder="ابحثي باسم العميل أو رقم الموبايل…" oninput="renderOrders()">
         <div class="chips" id="statusChips">
           <button class="on" data-s="" onclick="setStatusFilter(this)">الكل</button>
           <button data-s="pending" onclick="setStatusFilter(this)">جديد</button>
@@ -418,10 +418,10 @@ function renderOrders() {
   box.innerHTML = list.map(o => `
     <article class="order ${o.status === 'pending' ? 'new' : ''}">
       <div class="ohead">
-        <span><b>طلب #${esc(o.order_number)}</b> <span class="badge ${esc(o.status)}">${esc(STATUS[o.status] || o.status)}</span></span>
+        <span><b>${esc(o.customer_name)}</b> <span class="badge ${esc(o.status)}">${esc(STATUS[o.status] || o.status)}</span></span>
         <time>${new Date(o.created_at).toLocaleString('ar-EG')}</time>
       </div>
-      <p><b>${esc(o.customer_name)}</b> · <span dir="ltr">${esc(o.phone)}</span></p>
+      <p><span dir="ltr">${esc(o.phone)}</span></p>
       <p><small>العنوان:</small> ${esc(o.address)}</p>
       ${o.notes ? `<p><small>ملاحظات:</small> ${esc(o.notes)}</p>` : ''}
       <ul>${(o.order_items || []).map(x => `<li>${esc(x.product_name)} × ${x.quantity} — ${money(x.line_total)} ج.م</li>`).join('')}</ul>
